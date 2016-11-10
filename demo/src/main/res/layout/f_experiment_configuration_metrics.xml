@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?><!-- Copyright (C) 2016 The Android Open Source Project
+<?xml version="1.0" encoding="UTF-8"?><!-- Copyright (C) 2016 The Android Open Source Project
 
      Licensed under the Apache License, Version 2.0 (the "License");
      you may not use this file except in compliance with the License.
@@ -12,16 +12,17 @@
      See the License for the specific language governing permissions and
      limitations under the License.
 -->
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
 
-<resources>
+    <ListView
+        android:id="@+id/lv_metrics"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:focusable="false"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp" />
 
-    <style name="VOCoLisEU" parent="Theme.AppCompat.Light.NoActionBar">
-        <item name="colorPrimary">#004C99</item>
-        <item name="colorPrimaryDark">#003366</item>
-        <item name="colorAccent">#66B2FF</item>
-        <item name="android:label">@string/application_name</item>
-        <item name="android:windowNoTitle">true</item>
-        <!--<item name="android:icon">@drawable/ic_launcher</item>-->
-    </style>
 
-</resources>
+</RelativeLayout>

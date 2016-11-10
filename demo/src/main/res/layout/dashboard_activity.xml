@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?><!-- Copyright (C) 2016 The Android Open Source Project
+
+     Licensed under the Apache License, Version 2.0 (the "License");
+     you may not use this file except in compliance with the License.
+     You may obtain a copy of the License at
+
+          http://www.apache.org/licenses/LICENSE-2.0
+
+     Unless required by applicable law or agreed to in writing, software
+     distributed under the License is distributed on an "AS IS" BASIS,
+     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+     See the License for the specific language governing permissions and
+     limitations under the License.
+-->
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/root"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:focusable="true"
+    android:keepScreenOn="true">
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/dashboard_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:background="?attr/colorPrimary"
+        android:elevation="6dp"
+        android:logo="@drawable/ic_temp_icon_white"
+        android:labelFor="@string/application_name"
+        android:minHeight="?attr/actionBarSize"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+        app:popupTheme="@style/ThemeOverlay.AppCompat.Light"/>
+
+
+    <ListView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/lv_my_experiments"
+        android:layout_marginTop="5dp"
+        android:layout_marginEnd="5dp"
+        android:layout_below="@id/dashboard_toolbar" />
+
+    <ImageButton
+        android:layout_width="70dp"
+        android:layout_height="70dp"
+        android:src="@drawable/ic_plus_exp"
+        android:layout_marginBottom="17dp"
+        android:id="@+id/ib_new_experiment"
+        android:foregroundGravity="bottom"
+        android:contentDescription="@string/create_new_exp"
+        android:layout_alignParentBottom="true"
+        android:background="@drawable/circle"
+        android:layout_alignEnd="@+id/lv_my_experiments" />
+</RelativeLayout>

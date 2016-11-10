@@ -17,7 +17,7 @@
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
 
   <!-- The user visible name of the application. [CHAR LIMIT=20] -->
-  <string name="application_name">ExoPlayer2 Demo</string>
+  <string name="application_name">VO-CoLisEU</string>
 
   <string name="video">Video</string>
 
@@ -59,4 +59,50 @@
 
   <string name="sample_list_load_error">One or more sample lists failed to load</string>
 
+
+  <!--
+  [UFRGS] VO-CoLisEU colors and strings
+  -->
+
+  <!--colors-->
+  <color name="def">#004C99</color>
+  <color name="wht">#FFFFFF</color>
+  <color name="black">#000000</color>
+
+  <!--strings-->
+
+  <!--General-->
+  <string name="script">Experiment</string>
+  <string name="name">Name</string>
+
+  <!--Dashboard Acttivty-->
+  <string name="create_new_exp">Click to create a new script</string>
+
+  <!--Exp Item-->
+  <string name="ipport">ip:port</string>
+  <string name="filename">filename</string>
+  <string name="savedas">Saved as:</string>
+  <string name="provider">Provider IP:</string>
+
+  <!--Script configuration-->
+  <string name="exp_name_title">Experiment name</string>
+  <string name="file_name_title">File name</string>
+  <string name="provider_title">Provider address</string>
+  <string name="use_dash">Use DASH</string>
+  <string name="ask_info">Ask for information</string>
+  <string name="info_description">If checked, the script will ask some volunteer information, such as age, gender and levels of video streaming consumption and mobile streaming knowledge</string>
+  <string name="instructions_desc">Write here some instructions about the script</string>
+  <string name="instructions_example">Describe your script</string>
+  <string name="address_example">143.54.12.21:8081/manifest</string>
+  <string name="file_example">myfile (no extension)</string>
+
+
+  <!--Old-->
+  <string name="play_uc">PLAY</string>
+  <string name="samples_uc">SAMPLES</string>
+
+  <!--Metric-->
+  <string name="type">Type</string>
+  <string name="metric">Metric</string>
+  <string name="used">Used</string>
 </resources>

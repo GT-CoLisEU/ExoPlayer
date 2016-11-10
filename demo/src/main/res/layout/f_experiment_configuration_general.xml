@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8"?><!-- Copyright (C) 2016 The Android Open Source Project
+
+     Licensed under the Apache License, Version 2.0 (the "License");
+     you may not use this file except in compliance with the License.
+     You may obtain a copy of the License at
+
+          http://www.apache.org/licenses/LICENSE-2.0
+
+     Unless required by applicable law or agreed to in writing, software
+     distributed under the License is distributed on an "AS IS" BASIS,
+     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+     See the License for the specific language governing permissions and
+     limitations under the License.
+-->
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <EditText
+        android:id="@+id/et_exp_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="10dp"
+        android:ems="10"
+        android:gravity="center"
+        android:hint="@string/exp_name_title" />
+
+    <EditText
+        android:id="@+id/et_file_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/et_exp_name"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="10dp"
+        android:ems="10"
+        android:gravity="center"
+        android:hint="@string/file_name_title"/>
+
+    <EditText
+        android:id="@+id/et_provider_ip"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/et_file_name"
+        android:layout_centerHorizontal="true"
+        android:ems="10"
+        android:layout_marginTop="10dp"
+        android:gravity="center"
+        android:hint="@string/provider_title" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_marginTop="20dp"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/et_provider_ip">
+
+        <CheckBox
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/use_dash"
+            android:id="@+id/cb_use_dash"
+            android:layout_centerHorizontal="true" />
+
+        <CheckBox
+            android:id="@+id/cb_ask_info"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_below="@+id/cb_use_dash"
+            android:text="@string/ask_info"
+            android:checked="false" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/info_description"
+            android:ems="17"
+            android:gravity="center"
+            android:id="@+id/tv_info"
+            android:layout_below="@+id/cb_ask_info"
+            android:layout_centerHorizontal="true" />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@+id/tv_info"
+            android:layout_centerHorizontal="true">
+
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/instructions_desc"
+                android:id="@+id/tv_how_to"
+                android:layout_marginTop="20dp"
+                android:layout_alignParentTop="true"
+                android:layout_centerHorizontal="true" />
+
+            <EditText
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/et_instructions"
+                android:hint="@string/instructions_example"
+                android:gravity="center"
+                android:layout_below="@+id/tv_how_to"
+                android:layout_alignStart="@+id/tv_how_to"
+                android:layout_alignEnd="@+id/tv_how_to" />
+        </RelativeLayout>
+
+    </RelativeLayout>
+
+</RelativeLayout>

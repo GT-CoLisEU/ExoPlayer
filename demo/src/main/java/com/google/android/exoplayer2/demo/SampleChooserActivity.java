@@ -15,12 +15,16 @@
  */
 package com.google.android.exoplayer2.demo;
 
+import android.Manifest;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
 import android.util.JsonReader;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -39,6 +43,9 @@ import com.google.android.exoplayer2.upstream.DataSpec;
 import com.google.android.exoplayer2.upstream.DefaultDataSource;
 import com.google.android.exoplayer2.util.Assertions;
 import com.google.android.exoplayer2.util.Util;
+
+import java.io.BufferedWriter;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -60,6 +67,7 @@ public class SampleChooserActivity extends Activity {
     Intent intent = getIntent();
     String dataUri = intent.getDataString();
     String[] uris;
+    checkPerm();
     if (dataUri != null) {
       uris = new String[] {dataUri};
     } else {
@@ -69,6 +77,29 @@ public class SampleChooserActivity extends Activity {
     }
     SampleListLoader loaderTask = new SampleListLoader();
     loaderTask.execute(uris);
+  }
+
+  private void checkPerm() {
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+      if (checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+        requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
+      }
+    }
+  }
+
+  private static void write(String name) {
+    String msg = "{\"name\":\"jv\",\"age\": 19}";
+    try {
+      String csv = Environment.getExternalStorageDirectory().getAbsolutePath() + "/".concat(name.concat(".txt"));
+      BufferedWriter output;
+      output = new BufferedWriter(new FileWriter(csv, true));
+      output.append(msg);
+      output.newLine();
+      output.close();
+    } catch (IOException e) {
+      Log.i("vocoliseu", e.getMessage());
+      e.printStackTrace();
+    }
   }
 
   private void onSampleGroups(final List<SampleGroup> groups, boolean sawError) {
@@ -371,6 +402,7 @@ public class SampleChooserActivity extends Activity {
 
     public Intent buildIntent(Context context) {
       Intent intent = new Intent(context, PlayerActivity.class);
+//      write("teste");
       intent.putExtra(PlayerActivity.PREFER_EXTENSION_DECODERS, preferExtensionDecoders);
       if (drmSchemeUuid != null) {
         intent.putExtra(PlayerActivity.DRM_SCHEME_UUID_EXTRA, drmSchemeUuid.toString());
