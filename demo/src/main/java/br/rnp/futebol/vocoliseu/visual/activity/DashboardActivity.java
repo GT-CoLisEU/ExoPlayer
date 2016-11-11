@@ -20,9 +20,13 @@ import android.widget.Toast;
 
 import br.rnp.futebol.vocoliseu.dao.ScriptDAO;
 import br.rnp.futebol.vocoliseu.pojo.Script;
+import br.rnp.futebol.vocoliseu.pojo.TExperiment;
 import br.rnp.futebol.vocoliseu.util.adapter.ExperimentAdapter;
 import com.google.android.exoplayer2.demo.PlayerActivity;
 import com.google.android.exoplayer2.demo.R;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.List;
 
@@ -46,6 +50,13 @@ public class DashboardActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.dashboard_activity);
+        String str = "{\"name\": \"exp teste\", \"filename\": \"exptst\",\"askinfo\": false,\"instruction\": \"none\",\"qosMetrics\": [1, 3, 4],\"objQoeMetrics\": [1, 3, 4],\"scripts\": []}";
+        try {
+            JSONObject teste = new JSONObject(str);
+            TExperiment t = new TExperiment().fromJson(teste);
+        } catch (JSONException e){
+
+        }
 //        tvTitle = (TextView) findViewById(R.id.tv_title);
         ibNewExp = (ImageButton) findViewById(R.id.ib_new_experiment);
         lvExps = (ListView) findViewById(R.id.lv_my_experiments);
