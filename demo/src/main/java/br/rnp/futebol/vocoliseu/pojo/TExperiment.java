@@ -6,12 +6,13 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 /**
  * Created by camargo on 10/11/16.
  */
-public class TExperiment {
+public class TExperiment implements Serializable {
 
     private String name;
     private String filename;

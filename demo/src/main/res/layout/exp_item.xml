@@ -22,7 +22,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/name"
-        android:textColor="@color/black"
+        android:textColor="@color/def"
         android:id="@+id/tv_exp_item_name"
         android:layout_marginStart="10dp"
         android:layout_marginTop="7dp"
@@ -34,50 +34,30 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/savedas"
-        android:id="@+id/tv_exp_item_filename_static"
+        android:text="@string/filename"
+        android:id="@+id/tv_exp_item_filename"
         android:layout_below="@+id/tv_exp_item_name"
-        android:layout_marginBottom="5dp"
         android:layout_alignStart="@+id/tv_exp_item_name" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/filename"
-        android:layout_marginStart="5dp"
-        android:id="@+id/tv_exp_item_filename"
-        android:layout_alignTop="@+id/tv_exp_item_filename_static"
-        android:layout_toEndOf="@+id/tv_exp_item_filename_static" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/provider"
-        android:layout_marginBottom="5dp"
-        android:id="@+id/tv_exp_item_address_static"
-        android:layout_below="@+id/tv_exp_item_filename"
-        android:layout_alignStart="@+id/tv_exp_item_filename_static" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
         android:text="@string/ipport"
-        android:layout_marginStart="5dp"
         android:id="@+id/tv_exp_item_address"
-        android:layout_alignTop="@+id/tv_exp_item_address_static"
-        android:layout_toEndOf="@+id/tv_exp_item_address_static"/>
+        android:layout_below="@+id/tv_exp_item_filename"
+        android:layout_alignStart="@+id/tv_exp_item_filename" />
 
     <ImageView
-        android:layout_width="45dp"
-        android:layout_height="45dp"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
         android:contentDescription="@string/script"
-        android:layout_marginTop="12dp"
-        android:layout_marginStart="5dp"
+        android:layout_marginStart="6dp"
         android:src="@drawable/ic_experiment_icon"
         android:background="@drawable/circle_no_shadow"
         android:id="@+id/img_static_icon"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentStart="true" />
+        android:layout_alignTop="@+id/tv_exp_item_name"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="5dp" />
 
     <!--<CheckBox-->
         <!--android:layout_width="wrap_content"-->

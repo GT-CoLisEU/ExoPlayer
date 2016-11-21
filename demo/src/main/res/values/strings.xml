@@ -65,9 +65,16 @@
   -->
 
   <!--colors-->
-  <color name="def">#004C99</color>
+  <color name="def">#3F51B5</color>
+  <color name="dark">#303F9F</color>
+  <color name="darker">#000099</color>
+  <color name="accent">#3333FF</color>
   <color name="wht">#FFFFFF</color>
   <color name="black">#000000</color>
+
+
+  <!--<item name="colorPrimaryDark">#303F9F</item>-->
+  <!--<item name="colorAccent">#66B2FF</item>-->
 
   <!--strings-->
 
@@ -88,9 +95,8 @@
   <string name="exp_name_title">Experiment name</string>
   <string name="file_name_title">File name</string>
   <string name="provider_title">Provider address</string>
-  <string name="use_dash">Use DASH</string>
-  <string name="ask_info">Ask for information</string>
-  <string name="info_description">If checked, the script will ask some volunteer information, such as age, gender and levels of video streaming consumption and mobile streaming knowledge</string>
+  <string name="ask_info">Ask for user personal information</string>
+  <string name="ask_info_description">If checked, the script will ask some volunteer information, such as age, gender and levels of video streaming consumption and mobile streaming knowledge</string>
   <string name="instructions_desc">Write here some instructions about the script</string>
   <string name="instructions_example">Describe your script</string>
   <string name="address_example">143.54.12.21:8081/manifest</string>
@@ -105,4 +111,17 @@
   <string name="type">Type</string>
   <string name="metric">Metric</string>
   <string name="used">Used</string>
+
+  <!--Script-->
+  <string name="use_dash">Use DASH</string>
+  <string name="videoext">video.ext</string>
+  <string name="address">address</string>
+  <string name="address_description">Video Provider address</string>
+  <string name="video_name">Video name</string>
+  <string name="video_ext">Video extension</string>
+
+  <string name="open">Open</string>
+  <string name="close">Close</string>
+  <string name="no_video_found">No video was found to add to this experiment.\nCreate a new video through the navigation tab!\nYou will be able to add it to any experiment.</string>
+
 </resources>

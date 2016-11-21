@@ -16,12 +16,16 @@
 <resources>
 
     <style name="VOCoLisEU" parent="Theme.AppCompat.Light.NoActionBar">
-        <item name="colorPrimary">#004C99</item>
-        <item name="colorPrimaryDark">#003366</item>
-        <item name="colorAccent">#66B2FF</item>
+        <item name="colorPrimary">#3F51B5</item>
+        <item name="colorPrimaryDark">#303F9F</item>
+        <item name="colorAccent">#3333FF</item>
         <item name="android:label">@string/application_name</item>
         <item name="android:windowNoTitle">true</item>
         <!--<item name="android:icon">@drawable/ic_launcher</item>-->
     </style>
+
+    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+
+    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
 </resources>

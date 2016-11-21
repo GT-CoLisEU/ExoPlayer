@@ -188,16 +188,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.google.android.exoplayer2.ui;
+package com.google.android.exoplayer2.demo;
 
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.SharedPreferences;
+import android.content.Intent;
+import android.net.Uri;
+import android.os.Bundle;
 import android.os.Environment;
 import android.util.Log;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.android.exoplayer2.ExoPlaybackException;
 import com.google.android.exoplayer2.ExoPlayer;
@@ -210,39 +211,43 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.text.Normalizer;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+
+import br.rnp.futebol.vocoliseu.pojo.TExperiment;
+import br.rnp.futebol.vocoliseu.pojo.TScript;
+import br.rnp.futebol.vocoliseu.visual.activity.MainActivity;
 
 
 /**
  * A helper class for periodically updating a {@link TextView} with debug information obtained from
  * a {@link SimpleExoPlayer}.
  */
-public final class DebugTextViewHelper implements Runnable, ExoPlayer.EventListener {
+public final class VODebugTextViewHelper implements Runnable, ExoPlayer.EventListener {
 
     private static final int REFRESH_INTERVAL_MS = 1000;
 
     private final SimpleExoPlayer player;
-    private String file;
     private final TextView textView;
     private boolean started, isPstFilled;
     private long playbackStartTime, bufferingStartAux, bufferingEndAux;
-    private int bitrateAux = 0, bseCont = 0;
+    private int bitrateAux = 0, bseCont = 0, index;
     private boolean first = true, written = false, showedQuestion = false;
     private String initialRes, initialBR;
     private Context ctx;
-//    private TExperiment experiment;
+    private TExperiment experiment;
 
     /**
      * @param player   The {@link SimpleExoPlayer} from which debug information should be obtained.
      * @param textView The {@link TextView} that should be updated to display the information.
      */
-    public DebugTextViewHelper(SimpleExoPlayer player, TextView textView, Context ctx) {
+    public VODebugTextViewHelper(SimpleExoPlayer player, TextView textView, TExperiment experiment, Context ctx, int index) {
         this.player = player;
         this.textView = textView;
+        this.experiment = experiment;
         this.ctx = ctx;
+        this.index = index;
     }
 
     /**
@@ -331,19 +336,46 @@ public final class DebugTextViewHelper implements Runnable, ExoPlayer.EventListe
             textView.removeCallbacks(this);
             textView.postDelayed(this, REFRESH_INTERVAL_MS);
         } else {
-            String csv = Environment.getExternalStorageDirectory().getAbsolutePath() + "/".concat(file.concat(".csv"));
+            String csv = Environment.getExternalStorageDirectory().getAbsolutePath() + "/".concat(experiment.getFilename().concat(".csv"));
             File header = new File(csv);
             if (!header.exists())
                 write(getHeader(), false);
             if (!written)
                 write(buildCsvText(), true);
             if (!showedQuestion)
-                makeDialog("The video is finished", "Do you want to start a new video?",
-                        ctx, new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                            }
-                        });
+                if (experiment.getScripts().size() > ++index) {
+                    makeDialog("The video is finished", "Do you want to start a new video?",
+                            ctx, new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    TScript first = experiment.getScripts().get(index);
+
+                                    String provider = first.getProvider();
+
+                                    Bundle extras = new Bundle();
+                                    extras.putInt("index", index);
+                                    extras.putSerializable("experiment", experiment);
+
+                                    Intent intent = new Intent(ctx, PlayerActivity.class);
+                                    intent.putExtras(extras);
+
+                                    intent.setData(Uri.parse(provider));
+                                    intent.setAction(PlayerActivity.ACTION_VIEW);
+
+                                    ctx.startActivity(intent);
+                                }
+                            });
+                } else {
+                    makeDialog("The video is finished", "That was the last one. Thanks for your participation",
+                            ctx, new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    ctx.startActivity(new Intent(ctx, MainActivity.class));
+                                    ((PlayerActivity) ctx).finish();
+                                }
+                            });
+                }
+
             showedQuestion = true;
 
         }
@@ -434,7 +466,7 @@ public final class DebugTextViewHelper implements Runnable, ExoPlayer.EventListe
     private void write(String msg, boolean written) {
         try {
             this.written = written;
-            String csv = Environment.getExternalStorageDirectory().getAbsolutePath() + "/".concat(file.concat(".csv"));
+            String csv = Environment.getExternalStorageDirectory().getAbsolutePath() + "/".concat(experiment.getFilename().concat(".csv"));
             BufferedWriter output = new BufferedWriter(new FileWriter(csv, true));
             output.append(msg);
             output.newLine();

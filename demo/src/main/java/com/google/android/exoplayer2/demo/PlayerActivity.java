@@ -75,6 +75,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
+import br.rnp.futebol.vocoliseu.pojo.TExperiment;
+
 /**
  * An activity that plays media using {@link SimpleExoPlayer}.
  */
@@ -105,7 +107,7 @@ public class PlayerActivity extends Activity implements OnClickListener, ExoPlay
     private Handler mainHandler;
     private EventLogger eventLogger;
     private SimpleExoPlayerView simpleExoPlayerView;
-//    private LinearLayout debugRootView;
+    //    private LinearLayout debugRootView;
     private TextView debugTextView;
 //    private Button retryButton;
 
@@ -114,7 +116,7 @@ public class PlayerActivity extends Activity implements OnClickListener, ExoPlay
     private SimpleExoPlayer player;
     private MappingTrackSelector trackSelector;
     private TrackSelectionHelper trackSelectionHelper;
-    private DebugTextViewHelper debugViewHelper;
+    private VODebugTextViewHelper debugViewHelper;
     private boolean playerNeedsSource;
 
     private boolean shouldAutoPlay;
@@ -221,100 +223,107 @@ public class PlayerActivity extends Activity implements OnClickListener, ExoPlay
 
     private void initializePlayer() {
         Intent intent = getIntent();
-        String filename = "default";
-        if (intent.getExtras() != null)
-            filename = intent.getExtras().getString("file");
-        if (player == null) {
-            boolean preferExtensionDecoders = intent.getBooleanExtra(PREFER_EXTENSION_DECODERS, false);
-            UUID drmSchemeUuid = intent.hasExtra(DRM_SCHEME_UUID_EXTRA)
-                    ? UUID.fromString(intent.getStringExtra(DRM_SCHEME_UUID_EXTRA)) : null;
-            DrmSessionManager drmSessionManager = null;
-            if (drmSchemeUuid != null) {
-                String drmLicenseUrl = intent.getStringExtra(DRM_LICENSE_URL);
-                String[] keyRequestPropertiesArray = intent.getStringArrayExtra(DRM_KEY_REQUEST_PROPERTIES);
-                Map<String, String> keyRequestProperties;
-                if (keyRequestPropertiesArray == null || keyRequestPropertiesArray.length < 2) {
-                    keyRequestProperties = null;
-                } else {
-                    keyRequestProperties = new HashMap<>();
-                    for (int i = 0; i < keyRequestPropertiesArray.length - 1; i += 2) {
-                        keyRequestProperties.put(keyRequestPropertiesArray[i],
-                                keyRequestPropertiesArray[i + 1]);
+        TExperiment experiment = null;
+        int index = -1;
+        if (intent.getExtras() != null) {
+            experiment = (TExperiment) intent.getExtras().getSerializable("experiment");
+            index = intent.getExtras().getInt("index");
+        }
+        if (experiment != null && index != -1) {
+            if (player == null) {
+                boolean preferExtensionDecoders = intent.getBooleanExtra(PREFER_EXTENSION_DECODERS, false);
+                UUID drmSchemeUuid = intent.hasExtra(DRM_SCHEME_UUID_EXTRA)
+                        ? UUID.fromString(intent.getStringExtra(DRM_SCHEME_UUID_EXTRA)) : null;
+                DrmSessionManager drmSessionManager = null;
+                if (drmSchemeUuid != null) {
+                    String drmLicenseUrl = intent.getStringExtra(DRM_LICENSE_URL);
+                    String[] keyRequestPropertiesArray = intent.getStringArrayExtra(DRM_KEY_REQUEST_PROPERTIES);
+                    Map<String, String> keyRequestProperties;
+                    if (keyRequestPropertiesArray == null || keyRequestPropertiesArray.length < 2) {
+                        keyRequestProperties = null;
+                    } else {
+                        keyRequestProperties = new HashMap<>();
+                        for (int i = 0; i < keyRequestPropertiesArray.length - 1; i += 2) {
+                            keyRequestProperties.put(keyRequestPropertiesArray[i],
+                                    keyRequestPropertiesArray[i + 1]);
+                        }
+                    }
+                    try {
+                        drmSessionManager = buildDrmSessionManager(drmSchemeUuid, drmLicenseUrl,
+                                keyRequestProperties);
+                    } catch (UnsupportedDrmException e) {
+                        int errorStringId = Util.SDK_INT < 18 ? R.string.error_drm_not_supported
+                                : (e.reason == UnsupportedDrmException.REASON_UNSUPPORTED_SCHEME
+                                ? R.string.error_drm_unsupported_scheme : R.string.error_drm_unknown);
+                        showToast(errorStringId);
+                        return;
                     }
                 }
-                try {
-                    drmSessionManager = buildDrmSessionManager(drmSchemeUuid, drmLicenseUrl,
-                            keyRequestProperties);
-                } catch (UnsupportedDrmException e) {
-                    int errorStringId = Util.SDK_INT < 18 ? R.string.error_drm_not_supported
-                            : (e.reason == UnsupportedDrmException.REASON_UNSUPPORTED_SCHEME
-                            ? R.string.error_drm_unsupported_scheme : R.string.error_drm_unknown);
-                    showToast(errorStringId);
+
+                eventLogger = new EventLogger();
+                TrackSelection.Factory videoTrackSelectionFactory =
+                        new AdaptiveVideoTrackSelection.Factory(BANDWIDTH_METER);
+                trackSelector = new DefaultTrackSelector(mainHandler, videoTrackSelectionFactory);
+                trackSelector.addListener(this);
+                trackSelector.addListener(eventLogger);
+                trackSelectionHelper = new TrackSelectionHelper(trackSelector, videoTrackSelectionFactory);
+                player = ExoPlayerFactory.newSimpleInstance(this, trackSelector, new DefaultLoadControl(),
+                        drmSessionManager, preferExtensionDecoders);
+                player.addListener(this);
+                player.addListener(eventLogger);
+                player.setAudioDebugListener(eventLogger);
+                player.setVideoDebugListener(eventLogger);
+                player.setId3Output(eventLogger);
+                simpleExoPlayerView.setPlayer(player);
+                if (shouldRestorePosition) {
+                    if (playerPosition == C.TIME_UNSET) {
+                        player.seekToDefaultPosition(playerWindow);
+                    } else {
+                        player.seekTo(playerWindow, playerPosition);
+                    }
+                }
+                player.setPlayWhenReady(shouldAutoPlay);
+                debugViewHelper = new VODebugTextViewHelper(player, debugTextView, experiment, this, index);
+                debugViewHelper.start();
+                playerNeedsSource = true;
+            }
+            if (playerNeedsSource) {
+                String action = intent.getAction();
+                Uri[] uris;
+                String[] extensions;
+                if (ACTION_VIEW.equals(action)) {
+                    uris = new Uri[]{intent.getData()};
+                    extensions = new String[]{intent.getStringExtra(EXTENSION_EXTRA)};
+                } else if (ACTION_VIEW_LIST.equals(action)) {
+                    String[] uriStrings = intent.getStringArrayExtra(URI_LIST_EXTRA);
+                    uris = new Uri[uriStrings.length];
+                    for (int i = 0; i < uriStrings.length; i++) {
+                        uris[i] = Uri.parse(uriStrings[i]);
+                    }
+                    extensions = intent.getStringArrayExtra(EXTENSION_LIST_EXTRA);
+                    if (extensions == null) {
+                        extensions = new String[uriStrings.length];
+                    }
+                } else {
+                    showToast(getString(R.string.unexpected_intent_action, action));
                     return;
                 }
-            }
-
-            eventLogger = new EventLogger();
-            TrackSelection.Factory videoTrackSelectionFactory =
-                    new AdaptiveVideoTrackSelection.Factory(BANDWIDTH_METER);
-            trackSelector = new DefaultTrackSelector(mainHandler, videoTrackSelectionFactory);
-            trackSelector.addListener(this);
-            trackSelector.addListener(eventLogger);
-            trackSelectionHelper = new TrackSelectionHelper(trackSelector, videoTrackSelectionFactory);
-            player = ExoPlayerFactory.newSimpleInstance(this, trackSelector, new DefaultLoadControl(),
-                    drmSessionManager, preferExtensionDecoders);
-            player.addListener(this);
-            player.addListener(eventLogger);
-            player.setAudioDebugListener(eventLogger);
-            player.setVideoDebugListener(eventLogger);
-            player.setId3Output(eventLogger);
-            simpleExoPlayerView.setPlayer(player);
-            if (shouldRestorePosition) {
-                if (playerPosition == C.TIME_UNSET) {
-                    player.seekToDefaultPosition(playerWindow);
-                } else {
-                    player.seekTo(playerWindow, playerPosition);
+                if (Util.maybeRequestReadExternalStoragePermission(this, uris)) {
+                    // The player will be reinitialized if the permission is granted.
+                    return;
                 }
-            }
-            player.setPlayWhenReady(shouldAutoPlay);
-            debugViewHelper = new DebugTextViewHelper(player, debugTextView, filename);
-            debugViewHelper.start();
-            playerNeedsSource = true;
-        }
-        if (playerNeedsSource) {
-            String action = intent.getAction();
-            Uri[] uris;
-            String[] extensions;
-            if (ACTION_VIEW.equals(action)) {
-                uris = new Uri[]{intent.getData()};
-                extensions = new String[]{intent.getStringExtra(EXTENSION_EXTRA)};
-            } else if (ACTION_VIEW_LIST.equals(action)) {
-                String[] uriStrings = intent.getStringArrayExtra(URI_LIST_EXTRA);
-                uris = new Uri[uriStrings.length];
-                for (int i = 0; i < uriStrings.length; i++) {
-                    uris[i] = Uri.parse(uriStrings[i]);
+                MediaSource[] mediaSources = new MediaSource[uris.length];
+                for (int i = 0; i < uris.length; i++) {
+                    mediaSources[i] = buildMediaSource(uris[i], extensions[i]);
                 }
-                extensions = intent.getStringArrayExtra(EXTENSION_LIST_EXTRA);
-                if (extensions == null) {
-                    extensions = new String[uriStrings.length];
-                }
-            } else {
-                showToast(getString(R.string.unexpected_intent_action, action));
-                return;
+                MediaSource mediaSource = mediaSources.length == 1 ? mediaSources[0]
+                        : new ConcatenatingMediaSource(mediaSources);
+                player.prepare(mediaSource, !shouldRestorePosition);
+                playerNeedsSource = false;
+                updateButtonVisibilities();
             }
-            if (Util.maybeRequestReadExternalStoragePermission(this, uris)) {
-                // The player will be reinitialized if the permission is granted.
-                return;
-            }
-            MediaSource[] mediaSources = new MediaSource[uris.length];
-            for (int i = 0; i < uris.length; i++) {
-                mediaSources[i] = buildMediaSource(uris[i], extensions[i]);
-            }
-            MediaSource mediaSource = mediaSources.length == 1 ? mediaSources[0]
-                    : new ConcatenatingMediaSource(mediaSources);
-            player.prepare(mediaSource, !shouldRestorePosition);
-            playerNeedsSource = false;
-            updateButtonVisibilities();
+        } else {
+            Toast.makeText(getBaseContext(), "Couldn't display video", Toast.LENGTH_SHORT).show();
         }
     }
 

@@ -32,7 +32,7 @@
       android:allowBackup="false">
 
     <!--android:label="@string/application_name"-->
-    <activity android:name="br.rnp.futebol.vocoliseu.visual.activity.DashboardActivity"
+    <activity android:name="br.rnp.futebol.vocoliseu.visual.activity.MainActivity"
         android:theme="@style/VOCoLisEU">
       <intent-filter>
         <action android:name="android.intent.action.MAIN"/>
@@ -41,6 +41,18 @@
     </activity>
 
     <activity android:name="br.rnp.futebol.vocoliseu.visual.activity.ExperimentConfigurationControllerActivity"
+        android:theme="@style/VOCoLisEU">
+    </activity>
+
+    <activity android:name="br.rnp.futebol.vocoliseu.visual.activity.ExperimentGeneralInfoActivity"
+        android:theme="@style/VOCoLisEU">
+    </activity>
+
+    <activity android:name="br.rnp.futebol.vocoliseu.visual.activity.ScriptControllerActivity"
+        android:theme="@style/VOCoLisEU">
+    </activity>
+
+    <activity android:name="br.rnp.futebol.vocoliseu.visual.activity.ExperimentControllerActivity"
         android:theme="@style/VOCoLisEU">
     </activity>
 

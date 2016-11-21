@@ -87,9 +87,9 @@ public class Metric {
             case 1:
                 return "QoS";
             case 2:
-                return "QoE";
+                return "Subjective QoE";
             case 3:
-                return "QoE";
+                return "Objective QoE";
             default:
                 break;
         }

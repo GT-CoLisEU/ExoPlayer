@@ -8,6 +8,7 @@ import android.widget.BaseAdapter;
 import android.widget.TextView;
 
 import br.rnp.futebol.vocoliseu.pojo.Script;
+import br.rnp.futebol.vocoliseu.pojo.TExperiment;
 
 import com.google.android.exoplayer2.demo.R;
 
@@ -20,14 +21,14 @@ public class ExperimentAdapter extends BaseAdapter {
 
     private Context ctx;
     private TextView tvName, tvFilename, tvAdress;
-    private Script exp;
-    private List<Script> exps;
+    private TExperiment exp;
+    private List<TExperiment> exps;
 
 
     public ExperimentAdapter() {
     }
 
-    public ExperimentAdapter(Context context, List<Script> exps) {
+    public ExperimentAdapter(Context context, List<TExperiment> exps) {
         super();
         this.ctx = context;
         this.exps = exps;
@@ -43,8 +44,8 @@ public class ExperimentAdapter extends BaseAdapter {
         tvAdress = (TextView) view.findViewById(R.id.tv_exp_item_address);
 
         tvName.setText(exp.getName());
-        tvFilename.setText(exp.getFileName().concat(".txt"));
-        tvAdress.setText(exp.getAddress());
+        tvFilename.setText(exp.getFilename().concat(".txt"));
+        tvAdress.setText(exp.getScripts().size() + " video(s)");
 
         return view;
     }
