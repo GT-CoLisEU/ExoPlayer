@@ -1,193 +1,3 @@
-///*
-// * Copyright (C) 2016 The Android Open Source Project
-// *
-// * Licensed under the Apache License, Version 2.0 (the "License");
-// * you may not use this file except in compliance with the License.
-// * You may obtain a copy of the License at
-// *
-// *      http://www.apache.org/licenses/LICENSE-2.0
-// *
-// * Unless required by applicable law or agreed to in writing, software
-// * distributed under the License is distributed on an "AS IS" BASIS,
-// * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// * See the License for the specific language governing permissions and
-// * limitations under the License.
-// */
-//package com.google.android.exoplayer2.ui;
-//
-//import android.widget.TextView;
-//import com.google.android.exoplayer2.ExoPlaybackException;
-//import com.google.android.exoplayer2.ExoPlayer;
-//import com.google.android.exoplayer2.Format;
-//import com.google.android.exoplayer2.SimpleExoPlayer;
-//import com.google.android.exoplayer2.Timeline;
-//import com.google.android.exoplayer2.decoder.DecoderCounters;
-//
-///**
-// * A helper class for periodically updating a {@link TextView} with debug information obtained from
-// * a {@link SimpleExoPlayer}.
-// */
-//public final class DebugTextViewHelper implements Runnable, ExoPlayer.EventListener {
-//
-//  private static final int REFRESH_INTERVAL_MS = 1000;
-//
-//  private final SimpleExoPlayer player;
-//  private final TextView textView;
-//
-//  private boolean started;
-//
-//  /**
-//   * @param player The {@link SimpleExoPlayer} from which debug information should be obtained.
-//   * @param textView The {@link TextView} that should be updated to display the information.
-//   */
-//  public DebugTextViewHelper(SimpleExoPlayer player, TextView textView) {
-//    this.player = player;
-//    this.textView = textView;
-//  }
-//
-//  /**
-//   * Starts periodic updates of the {@link TextView}. Must be called from the application's main
-//   * thread.
-//   */
-//  public void start() {
-//    if (started) {
-//      return;
-//    }
-//    started = true;
-//    player.addListener(this);
-//    updateAndPost();
-//  }
-//
-//  /**
-//   * Stops periodic updates of the {@link TextView}. Must be called from the application's main
-//   * thread.
-//   */
-//  public void stop() {
-//    if (!started) {
-//      return;
-//    }
-//    started = false;
-//    player.removeListener(this);
-//    textView.removeCallbacks(this);
-//  }
-//
-//  // ExoPlayer.EventListener implementation.
-//
-//  @Override
-//  public void onLoadingChanged(boolean isLoading) {
-//    // Do nothing.
-//  }
-//
-//  @Override
-//  public void onPlayerStateChanged(boolean playWhenReady, int playbackState) {
-//    updateAndPost();
-//  }
-//
-//  @Override
-//  public void onPositionDiscontinuity() {
-//    updateAndPost();
-//  }
-//
-//  @Override
-//  public void onTimelineChanged(Timeline timeline, Object manifest) {
-//    // Do nothing.
-//  }
-//
-//  @Override
-//  public void onPlayerError(ExoPlaybackException error) {
-//    // Do nothing.
-//  }
-//
-//  // Runnable implementation.
-//
-//  @Override
-//  public void run() {
-//    updateAndPost();
-//  }
-//
-//  // Private methods.
-//
-//  private void updateAndPost() {
-//    textView.setText(getPlayerStateString() + getPlayerWindowIndexString() + getVideoString()
-//        + getAudioString());
-//    textView.removeCallbacks(this);
-//    textView.postDelayed(this, REFRESH_INTERVAL_MS);
-//  }
-//
-//  private String getPlayerStateString() {
-//    String text = "playWhenReady:" + player.getPlayWhenReady() + " playbackState:";
-//    switch (player.getPlaybackState()) {
-//      case ExoPlayer.STATE_BUFFERING:
-//        text += "buffering";
-//        break;
-//      case ExoPlayer.STATE_ENDED:
-//        text += "ended";
-//        break;
-//      case ExoPlayer.STATE_IDLE:
-//        text += "idle";
-//        break;
-//      case ExoPlayer.STATE_READY:
-//        text += "ready";
-//        break;
-//      default:
-//        text += "unknown";
-//        break;
-//    }
-//    return text;
-//  }
-//
-//  private String getPlayerWindowIndexString() {
-//    return " window:" + player.getCurrentWindowIndex();
-//  }
-//
-//  private String getVideoString() {
-//    Format format = player.getVideoFormat();
-//    if (format == null) {
-//      return "";
-//    }
-//    return "\n" + format.sampleMimeType + "(id:" + format.id + " r:" + format.width + "x"
-//        + format.height + getDecoderCountersBufferCountString(player.getVideoDecoderCounters())
-//        + ")";
-//  }
-//
-//  private String getAudioString() {
-//    Format format = player.getAudioFormat();
-//    if (format == null) {
-//      return "";
-//    }
-//    return "\n" + format.sampleMimeType + "(id:" + format.id + " hz:" + format.sampleRate + " ch:"
-//        + format.channelCount
-//        + getDecoderCountersBufferCountString(player.getAudioDecoderCounters()) + ")";
-//  }
-//
-//  private static String getDecoderCountersBufferCountString(DecoderCounters counters) {
-//    if (counters == null) {
-//      return "";
-//    }
-//    counters.ensureUpdated();
-//    return " rb:" + counters.renderedOutputBufferCount
-//        + " sb:" + counters.skippedOutputBufferCount
-//        + " db:" + counters.droppedOutputBufferCount
-//        + " mcdb:" + counters.maxConsecutiveDroppedOutputBufferCount;
-//  }
-//
-//}
-
-/*
- * Copyright (C) 2016 The Android Open Source Project
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
 package com.google.android.exoplayer2.demo;
 
 import android.app.AlertDialog;
@@ -199,6 +9,7 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.util.Log;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.exoplayer2.ExoPlaybackException;
 import com.google.android.exoplayer2.ExoPlayer;
@@ -212,6 +23,7 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -331,6 +143,8 @@ public final class VODebugTextViewHelper implements Runnable, ExoPlayer.EventLis
 //    textView.setText(getPlayerStateString() + getPlayerWindowIndexString() + getVideoString() + getAudioString());
 //    textView.setText(getPlayerStateString() + "Buffer Percentage: " + player.getBufferedPercentage() + "%\n" +
 //                     "Buffer Position: " + player.getBufferedPosition() + "\n");
+        Log.i("PLAYBACKSTATE", player.getPlaybackState() + "");
+//        Toast.makeText(ctx, "" + player.getPlaybackState(), Toast.LENGTH_SHORT).show();
         if (!(player.getPlaybackState() == ExoPlayer.STATE_ENDED)) {
             textView.setText(getLogString());
             textView.removeCallbacks(this);
@@ -382,13 +196,21 @@ public final class VODebugTextViewHelper implements Runnable, ExoPlayer.EventLis
     }
 
     private String buildCsvText() {
+        ArrayList<Integer> metrics = experiment.getObjectiveQoeMetrics();
         Format format = player.getVideoFormat();
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy-HH:mm:ss");
         String txt = sdf.format(new Date()) + ",";
-        txt += initialBR + "," + format.bitrate + "" + ",";
-        txt += initialRes + "," + format.width + "x" + format.height + ",";
-        txt += player.getStalls() + "," + player.getStallsDuration() + ",";
-        txt += playbackStartTime;
+        if (metrics.contains(6))
+            txt += player.getStalls() + ",";
+        if (metrics.contains(7))
+            txt += player.getStallsDuration() + ",";
+        if (metrics.contains(8))
+            txt += playbackStartTime + ",";
+        if (metrics.contains(9))
+            txt += initialRes + "," + format.width + "x" + format.height + ",";
+        if (metrics.contains(10))
+            txt += initialBR + "," + format.bitrate;
+        txt += "";
         return txt;
     }
 
@@ -429,7 +251,20 @@ public final class VODebugTextViewHelper implements Runnable, ExoPlayer.EventLis
     }
 
     private String getHeader() {
-        return "Timestamp, Initial Bitrate, Final Bitrate, Initial Res, Final Res, Freezes, Freezes Duration, Playback Start Time";
+        ArrayList<Integer> metrics = experiment.getObjectiveQoeMetrics();
+        String txt = "Timestamp,";
+        if (metrics.contains(6))
+            txt += "Freezes,";
+        if (metrics.contains(7))
+            txt += "Freezes Duration,";
+        if (metrics.contains(8))
+            txt += "Playback Start Time,";
+        if (metrics.contains(9))
+            txt += "Initial Res, Final Res,";
+        if (metrics.contains(10))
+            txt += "Initial Bitrate, Final Bitrate,";
+        txt += "";
+        return txt;
     }
 
     public AlertDialog makeDialog(String title, String message, Context myContext, DialogInterface.OnClickListener listener) {

@@ -17,7 +17,8 @@ public class TScript implements Serializable {
     private String address;
     private boolean useDash, isUsedAux;
     private ArrayList<Integer> subjectiveQoeMetrics;
-    private final String[] ATTRIBUTES = {"video", "extension", "address", "useDash", "subjectiveQoeMetrics"};
+    private BinaryQuestion question;
+    private final String[] ATTRIBUTES = {"video", "extension", "address", "useDash", "subjectiveQoeMetrics", "question"};
 
     public String getVideo() {
         return video;
@@ -98,7 +99,9 @@ public class TScript implements Serializable {
             json.put(ATTRIBUTES[cont++], this.isUseDash());
             for (Integer i : this.getSubjectiveQoeMetrics())
                 array.put(i);
-            json.put(ATTRIBUTES[cont], array);
+            json.put(ATTRIBUTES[cont++], array);
+            if (this.question != null)
+                json.put(ATTRIBUTES[cont], this.question.toJson());
         } catch (JSONException e) {
             return null;
         }
@@ -113,7 +116,9 @@ public class TScript implements Serializable {
             json.put(ATTRIBUTES[cont++], this.isUseDash());
             for (Integer i : this.getSubjectiveQoeMetrics())
                 array.put(i);
-            json.put(ATTRIBUTES[cont], array);
+            json.put(ATTRIBUTES[cont++], array);
+            if (this.question != null)
+                json.put(ATTRIBUTES[cont], this.question.toJson());
         } catch (JSONException e) {
             return null;
         }
@@ -127,10 +132,12 @@ public class TScript implements Serializable {
             this.useDash = json.getBoolean(ATTRIBUTES[cont++]);
 
             this.subjectiveQoeMetrics = new ArrayList<>();
-            JSONArray qoe = json.getJSONArray(ATTRIBUTES[cont]);
+            JSONArray qoe = json.getJSONArray(ATTRIBUTES[cont++]);
 
             for (int i = 0; i < qoe.length(); i++)
                 subjectiveQoeMetrics.add((Integer) qoe.get(i));
+
+            this.question = new BinaryQuestion().fromJson(json.getJSONObject(ATTRIBUTES[cont]));
 
         } catch (JSONException e) {
             return null;
@@ -142,5 +149,11 @@ public class TScript implements Serializable {
         return this.getAddress().concat("/").concat(this.getVideo()).concat(".").concat(this.getExtension());
     }
 
+    public BinaryQuestion getQuestion() {
+        return question;
+    }
 
+    public void setQuestion(BinaryQuestion question) {
+        this.question = question;
+    }
 }

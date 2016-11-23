@@ -81,16 +81,18 @@ public class ExperimentScriptsFragment extends Fragment {
                     experiment.getScripts().add(scripts.get(position));
                 else {
                     boolean aux = false;
-                    int cont = 0;
+                    int cont = 0, pos = -1;
                     for (TScript s : experiment.getScripts()) {
                         if (compareScripts(s, scripts.get(position))) {
-                            experiment.getScripts().remove(cont);
+                            pos = cont;
                             aux = true;
                         }
                         cont++;
                     }
                     if (!aux)
                         experiment.getScripts().add(scripts.get(position));
+                    else
+                        experiment.getScripts().remove(pos);
                 }
                 refreshList();
             }

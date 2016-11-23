@@ -1,11 +1,16 @@
 package br.rnp.futebol.vocoliseu.visual.activity;
 
 import android.Manifest;
+import android.app.AlertDialog;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.database.Cursor;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
@@ -14,29 +19,44 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.google.android.exoplayer2.demo.PlayerActivity;
 import com.google.android.exoplayer2.demo.R;
 
+import org.json.JSONObject;
+
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
+import java.net.URISyntaxException;
 import java.util.ArrayList;
+import java.util.List;
 
 import br.rnp.futebol.vocoliseu.dao.TExpForListDAO;
+import br.rnp.futebol.vocoliseu.pojo.Metric;
 import br.rnp.futebol.vocoliseu.pojo.TExperiment;
 import br.rnp.futebol.vocoliseu.pojo.TScript;
 import br.rnp.futebol.vocoliseu.util.adapter.ExperimentAdapter;
 import br.rnp.futebol.vocoliseu.util.adapter.MetricAdapter;
+import br.rnp.futebol.vocoliseu.util.adapter.SelectableExperimentAdapter;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
-    private ListView lvExperiments;
+    private ListView lvExperiments, lvAux;
     private ExperimentAdapter adapter;
     private ArrayList<TExperiment> exps;
+    private TExpForListDAO dao;
+    private final int SELECT_FILE_CODE = 7;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,17 +68,17 @@ public class MainActivity extends AppCompatActivity
         checkPerm();
 
         lvExperiments = (ListView) findViewById(R.id.lv_main_experiments);
+        lvAux = new ListView(this);
 
-//        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab_video);
+//        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab_experiment);
 //        fab.setOnClickListener(new View.OnClickListener() {
 //            @Override
 //            public void onClick(View view) {
-//                startActivity(new Intent(getBaseContext(), ExperimentGeneralInfoActivity.class));
+//
 //            }
 //        });
 
-
-        TExpForListDAO dao = new TExpForListDAO(getBaseContext());
+        dao = new TExpForListDAO(getBaseContext());
         exps = dao.getExpsByNames(dao.getExpsNames());
 
         lvExperiments.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -105,6 +125,76 @@ public class MainActivity extends AppCompatActivity
     }
 
     @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        switch (requestCode) {
+            case SELECT_FILE_CODE:
+                if (resultCode == RESULT_OK) {
+                    Uri uri = data.getData();
+                    importExp(getPath(this, uri));
+                }
+                break;
+        }
+        super.onActivityResult(requestCode, resultCode, data);
+    }
+
+    public String getPath(Context context, Uri uri) {
+        if ("content".equalsIgnoreCase(uri.getScheme())) {
+            String[] projection = {"_data"};
+            Cursor cursor = null;
+
+            try {
+                cursor = context.getContentResolver().query(uri, projection, null, null, null);
+                if (cursor != null) {
+                    int column_index = cursor.getColumnIndexOrThrow("_data");
+                    if (cursor.moveToFirst())
+                        return cursor.getString(column_index);
+                }
+            } catch (Exception e) {
+                // Eat it
+            } finally {
+                if (cursor != null)
+                    cursor.close();
+            }
+        } else if ("file".equalsIgnoreCase(uri.getScheme())) {
+            return uri.getPath();
+        }
+
+        return null;
+    }
+
+    private void importExp(String path) {
+        String json = read(path);
+        boolean success = false;
+        try {
+            TExperiment experiment = new TExperiment().fromJson(new JSONObject(json));
+            if (experiment != null) {
+                TExpForListDAO dao = new TExpForListDAO(getBaseContext());
+                dao.insert(experiment);
+                dao.close();
+                refreshList();
+                success = true;
+            }
+        } catch (Exception e) {
+            // eat it
+        }
+        Toast.makeText(getBaseContext(), success ? "Success!" : "Could not lad the file.", Toast.LENGTH_SHORT).show();
+    }
+
+    private String read(String file) {
+        try {
+//            String csv = Environment.getExternalStorageDirectory().getAbsolutePath().concat(file);
+            BufferedReader reader = new BufferedReader(new FileReader(file));
+            String text = "", line;
+            while ((line = reader.readLine()) != null) {
+                text += line.concat(" ");
+            }
+            return text;
+        } catch (IOException e) {
+            return "";
+        }
+    }
+
+    @Override
     protected void onResume() {
         super.onResume();
         refreshList();
@@ -121,6 +211,7 @@ public class MainActivity extends AppCompatActivity
     }
 
     private void refreshList() {
+        exps = dao.getExpsByNames(dao.getExpsNames());
         if (exps != null) {
             adapter = new ExperimentAdapter(getBaseContext(), exps);
             lvExperiments.setAdapter(adapter);
@@ -131,6 +222,9 @@ public class MainActivity extends AppCompatActivity
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             if (checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
                 requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
+            }
+            if (checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+                requestPermissions(new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, 1);
             }
         }
     }
@@ -166,6 +260,14 @@ public class MainActivity extends AppCompatActivity
             case (R.id.navigation_item_video):
                 startActivity(new Intent(this, ScriptControllerActivity.class));
                 break;
+            case (R.id.navigation_item_import):
+                Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+                intent.setType("text/plain");
+                startActivityForResult(intent, SELECT_FILE_CODE);
+                break;
+            case (R.id.navigation_item_export):
+                exportExps();
+                break;
             default:
                 break;
 
@@ -174,5 +276,77 @@ public class MainActivity extends AppCompatActivity
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+
+    private void refreshExportList(ArrayList<TExperiment> exps, ArrayList<TExperiment> exps2) {
+        for (TExperiment te : exps2)
+            te.setUsedAux(false);
+        for (TExperiment e: exps)
+            for (TExperiment te : exps2)
+                if (te.getFilename().equals(e.getFilename()))
+                    te.setUsedAux(true);
+
+        SelectableExperimentAdapter selAdapter = new SelectableExperimentAdapter(getBaseContext(), exps2);
+        lvAux.setAdapter(selAdapter);
+    }
+
+    private void exportExps() {
+        final AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        final ArrayList<TExperiment> experiments = new ArrayList<>();
+        final ArrayList<TExperiment> auxExps = exps;
+
+        refreshExportList(experiments, auxExps);
+        lvAux.setOnItemClickListener(new ListView.OnItemClickListener() {
+            public void onItemClick(AdapterView<?> listView, View itemView, int position, long itemId) {
+                boolean added = false;
+                int count = 0;
+                for (TExperiment e : experiments)
+                    if (e.getFilename().equals(exps.get(position).getFilename()))
+                        added = true;
+                    else
+                        count++;
+                if (!added)
+                    experiments.add(exps.get(position));
+                else
+                    experiments.remove(count);
+                refreshExportList(experiments, auxExps);
+            }
+        });
+
+        builder.setNegativeButton(
+                "cancel",
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.cancel();
+                        dialog.dismiss();
+                    }
+                });
+
+        builder.setPositiveButton("send", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                Intent emailIntent = new Intent(Intent.ACTION_SEND_MULTIPLE);
+                ArrayList<Uri> uris = new ArrayList<>();
+                for (TExperiment e : experiments) {
+                    File filelocation = new File(Environment.getExternalStorageDirectory().getAbsolutePath(), e.getFilename().concat(".txt"));
+//                    filelocation.setReadable(true, false);
+                    Uri path = Uri.fromFile(filelocation);
+                    uris.add(path);
+                }
+                emailIntent.putParcelableArrayListExtra(Intent.EXTRA_STREAM, uris);
+//                emailIntent.putExtra(Intent.EXTRA_STREAM, uris.get(0));
+                emailIntent.putExtra(Intent.EXTRA_SUBJECT, "VO-CoLisEU experiment(s)");
+                emailIntent.setType("file/*");
+                startActivity(emailIntent);
+                dialog.cancel();
+                dialog.dismiss();
+            }
+        });
+
+        builder.setTitle("Select one or more experiments:");
+        builder.setView(lvAux);
+        builder.show();
     }
 }

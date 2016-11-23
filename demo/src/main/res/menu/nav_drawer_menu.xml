@@ -7,6 +7,14 @@
             android:icon="@drawable/ic_experiment_icon"
             android:title="New Experiment" />
         <item
+            android:id="@+id/navigation_item_import"
+            android:icon="@android:drawable/ic_menu_revert"
+            android:title="Import Experiment" />
+        <item
+            android:id="@+id/navigation_item_export"
+            android:icon="@android:drawable/ic_menu_directions"
+            android:title="Export Experiment" />
+        <item
             android:id="@+id/navigation_item_video"
             android:icon="@drawable/ic_temp_icon_white"
             android:title="New video" />

@@ -15,12 +15,15 @@
  */
 package br.rnp.futebol.vocoliseu.visual.fragment;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.EditText;
 import android.widget.ListView;
 
 import com.google.android.exoplayer2.demo.R;
@@ -28,12 +31,11 @@ import com.google.android.exoplayer2.demo.R;
 import java.util.ArrayList;
 import java.util.List;
 
+import br.rnp.futebol.vocoliseu.pojo.BinaryQuestion;
 import br.rnp.futebol.vocoliseu.pojo.Metric;
-import br.rnp.futebol.vocoliseu.pojo.TExperiment;
 import br.rnp.futebol.vocoliseu.pojo.TScript;
 import br.rnp.futebol.vocoliseu.util.ReadyMetrics;
 import br.rnp.futebol.vocoliseu.util.adapter.MetricAdapter;
-import br.rnp.futebol.vocoliseu.visual.activity.ExperimentControllerActivity;
 import br.rnp.futebol.vocoliseu.visual.activity.ScriptControllerActivity;
 
 /**
@@ -47,6 +49,8 @@ public class ScriptMetricsFragment extends Fragment {
     private List<Metric> metrics;
     private MetricAdapter adapter;
     private TScript script;
+    private BinaryQuestion question = null;
+    boolean deleted;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -66,12 +70,83 @@ public class ScriptMetricsFragment extends Fragment {
     }
 
     private void operateMetricsList(ArrayList<Integer> metricsIds, int position) {
+        boolean triedToDelete = false;
+        if (ReadyMetrics.S_QOE_METRICS.get(position).getId() == ReadyMetrics.BINARY_QUESTION_ID)
+            if (!metricsIds.contains(ReadyMetrics.BINARY_QUESTION_ID))
+                insertBinaryQuestion();
+            else {
+                deleteBinaryQuestion(metricsIds, position);
+                triedToDelete = true;
+            }
+        if ((!triedToDelete) || (deleted))
+            operateAux(metricsIds, position);
+
+    }
+
+    private void operateAux(ArrayList<Integer> metricsIds, int position) {
         if (metricsIds.contains(metrics.get(position).getId())) {
             for (int i = 0; i < metricsIds.size(); i++)
                 if (metricsIds.get(i) == metrics.get(position).getId())
                     metricsIds.remove(i);
         } else
             metricsIds.add(metrics.get(position).getId());
+        refreshList();
+    }
+
+    private boolean deleteBinaryQuestion(final ArrayList<Integer> metricsIds, final int position) {
+        AlertDialog.Builder alert = new AlertDialog.Builder(getActivity());
+        deleted = false;
+        alert.setTitle("Be careful!");
+        alert.setMessage("Unchecking this option will delete the previous inserted question. Are you sure?");
+        alert.setPositiveButton("save", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                question = null;
+                script.setQuestion(null);
+                deleted = true;
+                dialog.dismiss();
+                operateAux(metricsIds, position);
+            }
+        });
+        alert.setNegativeButton("cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+        alert.show();
+        return deleted;
+    }
+
+    private void insertBinaryQuestion() {
+        AlertDialog.Builder alert = new AlertDialog.Builder(getActivity());
+        LayoutInflater inflater = getActivity().getLayoutInflater();
+        View view = inflater.inflate(R.layout.binary_question_form, null);
+        final EditText etQuestion = (EditText) view.findViewById(R.id.et_binary_question);
+        final EditText etAnswer1 = (EditText) view.findViewById(R.id.et_binary_answer_1);
+        final EditText etAnswer2 = (EditText) view.findViewById(R.id.et_binary_answer_2);
+
+        alert.setView(view);
+        alert.setTitle("Type your question and answers");
+        alert.setPositiveButton("save", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                question = new BinaryQuestion();
+                question.setQuestion(etQuestion.getText().toString());
+                question.setAnswer1(etAnswer1.getText().toString());
+                question.setAnswer2(etAnswer2.getText().toString());
+                script.setQuestion(question);
+                dialog.dismiss();
+            }
+        });
+        alert.setNegativeButton("cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+        alert.show();
+
     }
 
     private void init() {

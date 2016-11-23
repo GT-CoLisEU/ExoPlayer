@@ -17,6 +17,7 @@ public class TExperiment implements Serializable {
     private String name;
     private String filename;
     private boolean askInfo;
+    private boolean usedAux;
     private String instruction;
     private ArrayList<Integer> qosMetrics;
     private ArrayList<Integer> objectiveQoeMetrics;
@@ -45,6 +46,14 @@ public class TExperiment implements Serializable {
 
     public void setAskInfo(boolean askInfo) {
         this.askInfo = askInfo;
+    }
+
+    public boolean isUsedAux() {
+        return usedAux;
+    }
+
+    public void setUsedAux(boolean usedAux) {
+        this.usedAux = usedAux;
     }
 
     public String getInstruction() {
@@ -119,11 +128,11 @@ public class TExperiment implements Serializable {
             json.put(ATTRIBUTES[cont++], this.getFilename());
             json.put(ATTRIBUTES[cont++], this.isAskInfo());
             json.put(ATTRIBUTES[cont++], this.getInstruction());
-            for (Integer i: this.getQosMetrics())
+            for (Integer i : this.getQosMetrics())
                 qos.put(i);
-            for (Integer i: this.getObjectiveQoeMetrics())
+            for (Integer i : this.getObjectiveQoeMetrics())
                 qoe.put(i);
-            for (TScript s: this.getScripts())
+            for (TScript s : this.getScripts())
                 scripts.put(s.toJson());
             json.put(ATTRIBUTES[cont++], qos);
             json.put(ATTRIBUTES[cont++], qoe);
@@ -135,7 +144,6 @@ public class TExperiment implements Serializable {
     }
 
 //    "name", "filename", "askinfo", "instruction", "qosMetrics", "objQoeMetrics", "scripts"
-
 
 
 }

@@ -10,6 +10,7 @@ import br.rnp.futebol.vocoliseu.pojo.Metric;
 public class ReadyMetrics {
 
     public static ArrayList<Metric> QOS_METRICS, S_QOE_METRICS, O_QOE_METRICS;
+    public static int BINARY_QUESTION_ID;
 
     public static void init() {
         int id = 0;
@@ -23,9 +24,16 @@ public class ReadyMetrics {
 
         S_QOE_METRICS.add(new Metric(++id, "ACR scale", Metric.S_QOE));
         S_QOE_METRICS.add(new Metric(++id, "DCR scale", Metric.S_QOE));
+        S_QOE_METRICS.add(new Metric(++id, "Binary Question", Metric.S_QOE));
+        BINARY_QUESTION_ID = id;
 
         O_QOE_METRICS.add(new Metric(++id, "Number of Freezes", Metric.O_QOE));
-        O_QOE_METRICS.add(new Metric(++id, "Bitrate switchs", Metric.O_QOE));
+        O_QOE_METRICS.add(new Metric(++id, "Duration of Freezes", Metric.O_QOE));
+        O_QOE_METRICS.add(new Metric(++id, "Playback start time", Metric.O_QOE));
+        O_QOE_METRICS.add(new Metric(++id, "Initial and Final Resolution (DASH)", Metric.O_QOE));
+        O_QOE_METRICS.add(new Metric(++id, "Initial and Final Bitrate (DASH)", Metric.O_QOE));
+        O_QOE_METRICS.add(new Metric(++id, "Bitrate switches (DASH)", Metric.O_QOE));
+
     }
 
 
