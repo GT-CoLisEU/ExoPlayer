@@ -128,12 +128,15 @@ public class TExperiment implements Serializable {
             json.put(ATTRIBUTES[cont++], this.getFilename());
             json.put(ATTRIBUTES[cont++], this.isAskInfo());
             json.put(ATTRIBUTES[cont++], this.getInstruction());
-            for (Integer i : this.getQosMetrics())
-                qos.put(i);
-            for (Integer i : this.getObjectiveQoeMetrics())
-                qoe.put(i);
-            for (TScript s : this.getScripts())
-                scripts.put(s.toJson());
+            if (checkList(this.getQosMetrics()))
+                for (Integer i : this.getQosMetrics())
+                    qos.put(i);
+            if (checkList(this.getObjectiveQoeMetrics()))
+                for (Integer i : this.getObjectiveQoeMetrics())
+                    qoe.put(i);
+            if (checkListScript(this.getScripts()))
+                for (TScript s : this.getScripts())
+                    scripts.put(s.toJson());
             json.put(ATTRIBUTES[cont++], qos);
             json.put(ATTRIBUTES[cont++], qoe);
             json.put(ATTRIBUTES[cont], scripts);
@@ -141,6 +144,20 @@ public class TExperiment implements Serializable {
             return null;
         }
         return json;
+    }
+
+    private boolean checkList(ArrayList<Integer> list) {
+        if (list != null)
+            if (!list.isEmpty())
+                return true;
+        return false;
+    }
+
+    private boolean checkListScript(ArrayList<TScript> list) {
+        if (list != null)
+            if (!list.isEmpty())
+                return true;
+        return false;
     }
 
 //    "name", "filename", "askinfo", "instruction", "qosMetrics", "objQoeMetrics", "scripts"

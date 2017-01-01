@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?><!-- Copyright (C) 2016 The Android Open Source Project
+
+     Licensed under the Apache License, Version 2.0 (the "License");
+     you may not use this file except in compliance with the License.
+     You may obtain a copy of the License at
+
+          http://www.apache.org/licenses/LICENSE-2.0
+
+     Unless required by applicable law or agreed to in writing, software
+     distributed under the License is distributed on an "AS IS" BASIS,
+     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+     See the License for the specific language governing permissions and
+     limitations under the License.
+-->
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical">
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/tb_script_general_ac"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:background="?attr/colorPrimary"
+        android:elevation="6dp"
+        android:minHeight="?attr/actionBarSize"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+        app:popupTheme="@style/ThemeOverlay.AppCompat.Light"/>
+
+    <EditText
+        android:id="@+id/et_provider_address_ac"
+        android:layout_below="@id/tb_script_general_ac"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="10dp"
+        android:singleLine="true"
+        android:maxLines="1"
+        android:ems="14"
+        android:gravity="center"
+        android:hint="@string/address_description" />
+
+    <EditText
+        android:id="@+id/et_video_name_ac"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignStart="@+id/et_provider_address_ac"
+        android:layout_below="@+id/et_provider_address_ac"
+        android:layout_marginTop="10dp"
+        android:singleLine="true"
+        android:maxLines="1"
+        android:ems="14"
+        android:gravity="center"
+        android:hint="@string/video_name" />
+
+    <EditText
+        android:id="@+id/et_video_extension_ac"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:hint="@string/video_ext"
+        android:singleLine="true"
+        android:maxLines="1"
+        android:layout_below="@+id/et_video_name_ac"
+        android:layout_alignStart="@+id/et_video_name_ac"
+        android:layout_marginTop="10dp"
+        android:layout_alignEnd="@+id/et_video_name_ac" />
+
+    <EditText
+        android:id="@+id/et_video_loop_ac"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:inputType="number"
+        android:hint="@string/video_loop"
+        android:singleLine="true"
+        android:maxLines="1"
+        android:layout_below="@+id/et_video_extension_ac"
+        android:layout_alignStart="@+id/et_video_extension_ac"
+        android:layout_marginTop="10dp"
+        android:layout_alignEnd="@+id/et_video_name_ac" />
+
+    <CheckBox
+        android:id="@+id/cb_use_dash_flag_ac"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:checked="false"
+        android:gravity="center"
+        android:text="@string/use_dash"
+        android:layout_below="@+id/et_video_loop_ac"
+        android:layout_alignStart="@+id/et_video_loop_ac"
+        android:layout_marginTop="10dp"
+        android:layout_alignEnd="@+id/et_video_loop_ac" />
+
+    <ImageButton
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:src="@drawable/ic_arrow_right"
+        android:id="@+id/ib_script_pt2"
+        android:contentDescription="@string/create_new_exp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginEnd="10dp"
+        android:layout_marginBottom="10dp"
+        android:background="@drawable/circle" />
+
+</RelativeLayout>

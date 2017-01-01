@@ -4,11 +4,8 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 
-import br.rnp.futebol.vocoliseu.visual.fragment.ExperimentGeneralFragment;
-import br.rnp.futebol.vocoliseu.visual.fragment.ExperimentMetricsFragment;
-import br.rnp.futebol.vocoliseu.visual.fragment.ExperimentScriptsFragment;
-import br.rnp.futebol.vocoliseu.visual.fragment.ScriptGeneralFragment;
-import br.rnp.futebol.vocoliseu.visual.fragment.ScriptMetricsFragment;
+import br.rnp.futebol.vocoliseu.visual.fragment.unused.ScriptGeneralFragment;
+import br.rnp.futebol.vocoliseu.visual.fragment.unused.ScriptMetricsFragment;
 
 public class ScriptFragmentAdapter extends FragmentStatePagerAdapter {
 

@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package br.rnp.futebol.vocoliseu.visual.fragment;
+package br.rnp.futebol.vocoliseu.visual.fragment.unused;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -26,42 +26,42 @@ import android.widget.EditText;
 
 import com.google.android.exoplayer2.demo.R;
 
-import br.rnp.futebol.vocoliseu.pojo.TScript;
-import br.rnp.futebol.vocoliseu.visual.activity.ScriptControllerActivity;
+import br.rnp.futebol.vocoliseu.pojo.TExperiment;
+import br.rnp.futebol.vocoliseu.visual.activity.unused.ExperimentControllerActivity;
 
-public class ScriptGeneralFragment extends Fragment {
+public class ExperimentGeneralFragment extends Fragment {
 
     private static final String TAG = "ExperimentMetrics";
-    private TScript script;
-    private EditText etAddress, etVideo, etExtension;
-    private CheckBox cbUseDash;
+    private TExperiment experiment;
+    private EditText etName, etFilename, etInstructions;
+    private CheckBox cbAskInfo;
     private View view;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        view = inflater.inflate(R.layout.script_general_fragment, container, false);
-        script = ((ScriptControllerActivity) getActivity()).getScript();
+        view = inflater.inflate(R.layout.experiment_general_fragment, container, false);
+        experiment = ((ExperimentControllerActivity) getActivity()).getExperiment();
         init();
-        cbUseDash.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+        cbAskInfo.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                script.setUseDash(isChecked);
+                experiment.setAskInfo(isChecked);
             }
         });
-        etAddress.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+        etName.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
                 updateInfo();
             }
         });
-        etVideo.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+        etFilename.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
                 updateInfo();
             }
         });
-        etExtension.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+        etInstructions.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
                 updateInfo();
@@ -76,16 +76,16 @@ public class ScriptGeneralFragment extends Fragment {
     }
 
     private void init() {
-        etAddress = (EditText) view.findViewById(R.id.et_provider_address);
-        etVideo = (EditText) view.findViewById(R.id.et_video_name);
-        etExtension = (EditText) view.findViewById(R.id.et_video_extension);
-        cbUseDash = (CheckBox) view.findViewById(R.id.cb_use_dash_flag);
+        etName = (EditText) view.findViewById(R.id.et_exp_name);
+        etFilename = (EditText) view.findViewById(R.id.et_file_name);
+        etInstructions = (EditText) view.findViewById(R.id.et_instructions);
+        cbAskInfo = (CheckBox) view.findViewById(R.id.cb_ask_info);
     }
 
     private void updateInfo() {
-        script.setAddress(etAddress.getText().toString());
-        script.setVideo(etVideo.getText().toString());
-        script.setExtension(etExtension.getText().toString());
+        experiment.setName(etName.getText().toString());
+        experiment.setFilename(etFilename.getText().toString());
+        experiment.setInstruction(etInstructions.getText().toString());
     }
 
 

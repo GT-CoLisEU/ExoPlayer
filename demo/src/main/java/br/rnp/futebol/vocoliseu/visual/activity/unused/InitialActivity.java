@@ -1,4 +1,4 @@
-package br.rnp.futebol.vocoliseu.visual.activity;
+package br.rnp.futebol.vocoliseu.visual.activity.unused;
 
 import android.Manifest;
 import android.content.Intent;
@@ -16,12 +16,6 @@ import android.widget.EditText;
 
 import com.google.android.exoplayer2.demo.PlayerActivity;
 import com.google.android.exoplayer2.demo.R;
-
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import br.rnp.futebol.vocoliseu.pojo.TExperiment;
-import br.rnp.futebol.vocoliseu.visual.activity.ExperimentConfigurationControllerActivity;
 
 /**
  * Created by camargo on 20/10/16.

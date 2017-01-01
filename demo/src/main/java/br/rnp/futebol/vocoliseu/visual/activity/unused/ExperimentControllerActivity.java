@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package br.rnp.futebol.vocoliseu.visual.activity;
+package br.rnp.futebol.vocoliseu.visual.activity.unused;
 
 import android.os.Bundle;
 import android.os.Environment;
@@ -26,12 +26,10 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
-import br.rnp.futebol.vocoliseu.dao.ScriptDAO;
-import br.rnp.futebol.vocoliseu.pojo.Script;
-import br.rnp.futebol.vocoliseu.util.adapter.FragmentAdapter;
-import br.rnp.futebol.vocoliseu.pojo.Metric;
 import com.google.android.exoplayer2.demo.R;
-import br.rnp.futebol.vocoliseu.util.ReadyMetrics;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -40,37 +38,46 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 
-public class ExperimentConfigurationControllerActivity extends AppCompatActivity {
+import br.rnp.futebol.vocoliseu.dao.ScriptDAO;
+import br.rnp.futebol.vocoliseu.dao.TExpForListDAO;
+import br.rnp.futebol.vocoliseu.pojo.Metric;
+import br.rnp.futebol.vocoliseu.pojo.Script;
+import br.rnp.futebol.vocoliseu.pojo.TExperiment;
+import br.rnp.futebol.vocoliseu.util.ReadyMetrics;
+import br.rnp.futebol.vocoliseu.util.adapter.ExpFragmentAdapter;
+import br.rnp.futebol.vocoliseu.util.adapter.FragmentAdapter;
 
-    private static final String TAG = "ExpConfigController";
-    private Script script;
+public class ExperimentControllerActivity extends AppCompatActivity {
+
+    private static final String TAG = "ExperimentController";
+    private TExperiment experiment;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.experiment_configuration_controller);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.exp_config_toolbar);
-        TabLayout tabLayout = (TabLayout) findViewById(R.id.exp_config_tab_layout);
-        final ViewPager viewPager = (ViewPager) findViewById(R.id.exp_config_pager);
+        setContentView(R.layout.experiment_fragment_controller);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.tb_experiment);
+        TabLayout tabLayout = (TabLayout) findViewById(R.id.tl_experiment);
+        final ViewPager viewPager = (ViewPager) findViewById(R.id.vp_experiment);
 
-        script = new Script();
-        ArrayList<Metric> metrics = new ArrayList<>();
+        experiment = new TExperiment();
+//        ArrayList<Metric> metrics = new ArrayList<>();
 
-        ReadyMetrics.init();
-        metrics.addAll(ReadyMetrics.QOS_METRICS);
-        metrics.addAll(ReadyMetrics.S_QOE_METRICS);
-        metrics.addAll(ReadyMetrics.O_QOE_METRICS);
-        script.setMetrics(metrics);
+//        ReadyMetrics.init();
+//        metrics.addAll(ReadyMetrics.QOS_METRICS);
+//        metrics.addAll(ReadyMetrics.S_QOE_METRICS);
+//        metrics.addAll(ReadyMetrics.O_QOE_METRICS);
 
         setSupportActionBar(toolbar);
 //        toolbar.setLogo(R.drawable.ic_temp_icon_white_2);
 
-        tabLayout.addTab(tabLayout.newTab().setText("SETTINGS"));
+        tabLayout.addTab(tabLayout.newTab().setText("EXPERIMENT"));
         tabLayout.addTab(tabLayout.newTab().setText("METRICS"));
+        tabLayout.addTab(tabLayout.newTab().setText("VIDEOS"));
 //        tabLayout.addTab(tabLayout.newTab().setText("Metrics"));
         tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
 
-        FragmentAdapter adapter = new FragmentAdapter(getSupportFragmentManager());
+        ExpFragmentAdapter adapter = new ExpFragmentAdapter(getSupportFragmentManager());
         viewPager.setAdapter(adapter);
         viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
         tabLayout.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
@@ -114,23 +121,7 @@ public class ExperimentConfigurationControllerActivity extends AppCompatActivity
     }
 
     private boolean areFieldsOk() {
-        return ((isFieldOk(script.getName())) && (isFieldOk(script.getFileName()))
-                && (isFieldOk(script.getAddress())));
-    }
-
-    private String read(String file) {
-        try {
-            String csv = Environment.getExternalStorageDirectory().getAbsolutePath() + "/".concat(file.concat(".txt"));
-            BufferedReader reader = new BufferedReader(new FileReader(csv));
-            String text = "", line;
-            while ((line = reader.readLine()) != null) {
-                text += line.concat(" ");
-            }
-            return text;
-        } catch (IOException e) {
-            Log.i(TAG, e.getMessage());
-            return "";
-        }
+        return ((isFieldOk(experiment.getName())) && (isFieldOk(experiment.getFilename())));
     }
 
 
@@ -139,28 +130,31 @@ public class ExperimentConfigurationControllerActivity extends AppCompatActivity
         int id = item.getItemId();
         if (id == R.id.action_save) {
             if (areFieldsOk()) {
-                write(script.getFileName(), script.toJson().toString());
-                Toast.makeText(getBaseContext(), "Script saved as " + script.getFileName() + ".txt", Toast.LENGTH_SHORT).show();
-                Log.i(TAG, read(script.getFileName()));
-                new ScriptDAO(getBaseContext()).insert(script);
+                write(experiment.getFilename(), experiment.toJson().toString());
+                TExpForListDAO dao = new TExpForListDAO(getBaseContext());
+                dao.insert(experiment);
+                dao.close();
+                Toast.makeText(getBaseContext(), "Script saved as " + experiment.getFilename() + ".txt", Toast.LENGTH_SHORT).show();
+//                Log.i(TAG, read(script.getFileName()));
+//                new ScriptDAO(getBaseContext()).insert(script);
                 finish();
 //                try {
 //                    Script exp = new Script().fromJson(new JSONObject(read(script.getFileName())));
 //                } catch (JSONException e) {
 //                }
             } else {
-                Toast.makeText(getBaseContext(), "Name, filename and address cannot be empty", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getBaseContext(), "Name and filename cannot be empty", Toast.LENGTH_SHORT).show();
             }
         }
         return super.onOptionsItemSelected(item);
     }
 
-    public Script getScript() {
-        return script;
+    public TExperiment getExperiment() {
+        return experiment;
     }
 
-    public void setScript(Script script) {
-        this.script = script;
+    public void setExperiment(TExperiment experiment) {
+        this.experiment = experiment;
     }
 }
 

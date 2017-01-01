@@ -1,43 +1,122 @@
-<?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<?xml version="1.0" encoding="UTF-8"?><!-- Copyright (C) 2016 The Android Open Source Project
+
+     Licensed under the Apache License, Version 2.0 (the "License");
+     you may not use this file except in compliance with the License.
+     You may obtain a copy of the License at
+
+          http://www.apache.org/licenses/LICENSE-2.0
+
+     Unless required by applicable law or agreed to in writing, software
+     distributed under the License is distributed on an "AS IS" BASIS,
+     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+     See the License for the specific language governing permissions and
+     limitations under the License.
+-->
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:fitsSystemWindows="true"
-    tools:context="br.rnp.futebol.vocoliseu.visual.activity.MainActivity">
+    android:orientation="vertical">
 
-    <android.support.design.widget.AppBarLayout
-        android:layout_height="wrap_content"
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/tb_exp_general_ac"
+        android:navigationIcon="@drawable/ic_arrow_right"
         android:layout_width="match_parent"
-        android:theme="@style/AppTheme.AppBarOverlay">
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:background="?attr/colorPrimary"
+        android:elevation="6dp"
+        android:minHeight="?attr/actionBarSize"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+        app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
 
-        <android.support.v7.widget.Toolbar
-            android:id="@+id/toolbar"
-            android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            android:background="?attr/colorPrimary"
-            app:popupTheme="@style/AppTheme.PopupOverlay" />
+    <EditText
+        android:id="@+id/et_exp_name_ac"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:singleLine="true"
+        android:maxLines="1"
+        android:layout_below="@+id/tb_exp_general_ac"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="10dp"
+        android:ems="14"
+        android:gravity="center"
+        android:hint="@string/exp_name_title" />
 
-    </android.support.design.widget.AppBarLayout>
+    <EditText
+        android:id="@+id/et_file_name_ac"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:singleLine="true"
+        android:maxLines="1"
+        android:layout_alignStart="@+id/et_exp_name_ac"
+        android:layout_below="@+id/et_exp_name_ac"
+        android:layout_marginTop="10dp"
+        android:ems="14"
+        android:gravity="center"
+        android:hint="@string/file_name_title" />
 
-    <include layout="@layout/content_main"/>
+    <!--<RelativeLayout-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_marginTop="20dp"-->
+    <!--android:layout_height="match_parent"-->
+    <!--android:layout_below="@+id/et_file_name">-->
 
-    <!--<android.support.design.widget.FloatingActionButton-->
-        <!--android:id="@+id/fab_video"-->
-        <!--android:layout_width="wrap_content"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:layout_gravity="bottom|end"-->
-        <!--android:layout_margin="@dimen/fab_margin"-->
-        <!--android:src="@drawable/ic_media_play" />-->
+    <CheckBox
+        android:id="@+id/cb_ask_info_ac"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignEnd="@+id/et_file_name_ac"
+        android:layout_alignStart="@+id/et_file_name_ac"
+        android:layout_below="@+id/et_file_name_ac"
+        android:checked="false"
+        android:gravity="center"
+        android:hint="@string/ask_info_description"
+        android:text="@string/ask_info" />
 
-    <!--<android.support.design.widget.FloatingActionButton-->
-    <!--android:id="@+id/fab_experiment"-->
-    <!--android:layout_width="wrap_content"-->
-    <!--android:layout_height="wrap_content"-->
-    <!--android:layout_gravity="bottom|end"-->
-    <!--android:layout_margin="@dimen/fab_margin"-->
-    <!--android:src="@drawable/ic_media_play" />-->
+    <!--<RelativeLayout-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="match_parent"-->
+    <!--android:layout_below="@+id/tv_info"-->
+    <!--android:layout_centerHorizontal="true">-->
+
+
+    <TextView
+        android:id="@+id/tv_how_to"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignEnd="@+id/cb_ask_info_ac"
+        android:layout_alignStart="@+id/cb_ask_info_ac"
+        android:layout_below="@+id/cb_ask_info_ac"
+        android:gravity="center"
+        android:text="@string/instructions_desc" />
+
+    <EditText
+        android:id="@+id/et_instructions_ac"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignEnd="@+id/tv_how_to"
+        android:layout_alignStart="@+id/tv_how_to"
+        android:layout_below="@+id/cb_ask_info_ac"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="26dp"
+        android:gravity="center"
+        android:hint="@string/instructions_example" />
+
+    <ImageButton
+        android:id="@+id/ib_experiment_pt2"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginBottom="10dp"
+        android:layout_marginEnd="10dp"
+        android:background="@drawable/circle"
+        android:contentDescription="@string/create_new_exp"
+        android:src="@drawable/ic_arrow_right" />
+
+    <!--</RelativeLayout>-->
+
+    <!--</RelativeLayout>-->
 
 </RelativeLayout>

@@ -119,6 +119,7 @@
   <string name="address_description">Video Provider address</string>
   <string name="video_name">Video name</string>
   <string name="video_ext">Video extension</string>
+  <string name="video_loop">Number of Repetitions</string>
 
   <string name="open">Open</string>
   <string name="close">Close</string>

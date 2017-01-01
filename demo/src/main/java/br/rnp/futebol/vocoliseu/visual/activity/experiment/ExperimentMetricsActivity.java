@@ -13,56 +13,44 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package br.rnp.futebol.vocoliseu.visual.fragment;
+package br.rnp.futebol.vocoliseu.visual.activity.experiment;
 
+import android.content.Intent;
 import android.os.Bundle;
-import android.os.Environment;
-import android.support.v4.app.Fragment;
-import android.util.Log;
-import android.view.LayoutInflater;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.ImageButton;
 import android.widget.ListView;
-import android.widget.Toast;
 
 import com.google.android.exoplayer2.demo.R;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 import br.rnp.futebol.vocoliseu.pojo.Metric;
-import br.rnp.futebol.vocoliseu.pojo.Script;
 import br.rnp.futebol.vocoliseu.pojo.TExperiment;
 import br.rnp.futebol.vocoliseu.util.ReadyMetrics;
 import br.rnp.futebol.vocoliseu.util.adapter.MetricAdapter;
-import br.rnp.futebol.vocoliseu.visual.activity.ExperimentConfigurationControllerActivity;
-import br.rnp.futebol.vocoliseu.visual.activity.ExperimentControllerActivity;
 
 /**
  * An activity for selecting from a list of samples.
  */
-public class ExperimentMetricsFragment extends Fragment {
+public class ExperimentMetricsActivity extends AppCompatActivity {
 
     private static final String TAG = "ExperimentMetrics";
-    private View view;
     private ListView lvMetrics;
     private List<Metric> metrics;
     private MetricAdapter adapter;
+    private ImageButton ibPt3;
     private TExperiment experiment;
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        view = inflater.inflate(R.layout.experiment_metrics_fragment, container, false);
+        setContentView(R.layout.experiment_metrics_activity);
         init();
         lvMetrics.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -79,7 +67,16 @@ public class ExperimentMetricsFragment extends Fragment {
                 refreshList();
             }
         });
-        return view;
+        ibPt3.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Bundle extras = new Bundle();
+                extras.putSerializable("experiment", experiment);
+                Intent intent = new Intent(getBaseContext(), ExperimentScriptsActivity.class);
+                intent.putExtras(extras);
+                startActivity(intent);
+            }
+        });
     }
 
     private void operateMetricsList(ArrayList<Integer> metricsIds, int position) {
@@ -92,8 +89,21 @@ public class ExperimentMetricsFragment extends Fragment {
     }
 
     private void init() {
-        experiment = ((ExperimentControllerActivity) getActivity()).getExperiment();
-        lvMetrics = (ListView) view.findViewById(R.id.lv_exp_metrics);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.tb_exp_metrics_ac);
+        toolbar.setNavigationIcon(R.drawable.ic_arrow_back);
+        toolbar.setTitle("New experiment");
+        toolbar.setTitleTextAppearance(this, R.style.ToolbarTitleAppearance);
+        toolbar.setSubtitle("Select the metrics you want");
+        toolbar.setSubtitleTextAppearance(this, R.style.ToolbarSubtitleAppearance);
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
+        setSupportActionBar(toolbar);
+        ibPt3 = (ImageButton) findViewById(R.id.ib_exp_pt3);
+        lvMetrics = (ListView) findViewById(R.id.lv_exp_metrics_ac);
         metrics = new ArrayList<>();
     }
 
@@ -115,7 +125,7 @@ public class ExperimentMetricsFragment extends Fragment {
                     if (id == m.getId())
                         m.setUsed(true);
         if (metrics != null) {
-            adapter = new MetricAdapter(getContext(), metrics);
+            adapter = new MetricAdapter(this, metrics);
             lvMetrics.setAdapter(adapter);
         }
     }
@@ -123,7 +133,14 @@ public class ExperimentMetricsFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        refreshList();
+        Bundle extras = null;
+        if (getIntent() != null)
+            extras = getIntent().getExtras();
+        experiment = (extras != null) ? (TExperiment) extras.getSerializable("experiment") : null;
+        if (experiment == null)
+            finish();
+        else
+            refreshList();
     }
 
 }

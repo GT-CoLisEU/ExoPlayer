@@ -14,23 +14,18 @@
             android:id="@+id/navigation_item_export"
             android:icon="@android:drawable/ic_menu_directions"
             android:title="Export Experiment" />
+    </group>
+    <group android:checkableBehavior="single">
         <item
             android:id="@+id/navigation_item_video"
             android:icon="@drawable/ic_temp_icon_white"
             android:title="New video" />
-        <!--<item-->
-        <!--android:id="@+id/navigation_subheader"-->
-        <!--android:title="Tutorials">-->
-        <!--<menu>-->
-        <!--<item-->
-        <!--android:id="@+id/navigation_sub_item_1"-->
-        <!--android:icon="@drawable/ic_image_looks_one"-->
-        <!--android:title="Android Tutorials"/>-->
-        <!--<item-->
-        <!--android:id="@+id/navigation_sub_item_2"-->
-        <!--android:icon="@drawable/ic_image_looks_two"-->
-        <!--android:title="IOS Tutorials"/>-->
-        <!--</menu>-->
-        <!--</item>-->
+    </group>
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/navigation_item_about"
+            android:icon="@drawable/ic_temp_icon_white"
+            android:title="About" />
     </group>
 </menu>

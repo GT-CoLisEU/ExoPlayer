@@ -13,12 +13,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package br.rnp.futebol.vocoliseu.visual.activity;
+package br.rnp.futebol.vocoliseu.visual.fragment.unused;
 
-import android.Manifest;
-import android.app.Activity;
-import android.content.pm.PackageManager;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.support.v4.app.Fragment;
@@ -26,11 +22,15 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.TextView;
+import android.widget.AdapterView;
+import android.widget.ListView;
 
+import br.rnp.futebol.vocoliseu.pojo.Script;
+import br.rnp.futebol.vocoliseu.pojo.Metric;
+import br.rnp.futebol.vocoliseu.util.adapter.MetricAdapter;
 import com.google.android.exoplayer2.demo.R;
+
+import br.rnp.futebol.vocoliseu.visual.activity.unused.ExperimentConfigurationControllerActivity;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -40,39 +40,67 @@ import java.io.BufferedWriter;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.List;
 
 /**
  * An activity for selecting from a list of samples.
  */
-public class ExperimentConfiguration extends Fragment {
+public class ExperimentConfigurationMetricsFragment extends Fragment {
 
     private static final String TAG = "ExperimentConfiguration";
     private View view;
+    private Script script;
+    private ExperimentConfigurationControllerActivity activity;
+    private ListView lvMetrics;
+    private List<Metric> metrics;
+    private MetricAdapter adapter;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        view = inflater.inflate(R.layout.experiment_configuration, container, false);
-        final TextView show = (TextView) view.findViewById(R.id.tv_show);
-        final EditText file = (EditText) view.findViewById(R.id.et_file_name), name = (EditText) view.findViewById(R.id.et_name), info = (EditText) view.findViewById(R.id.et_info);
-        Button write = (Button) view.findViewById(R.id.bt_write), read = (Button) view.findViewById(R.id.bt_read);
-//        checkPerm();
-        write.setOnClickListener(new View.OnClickListener() {
+        view = inflater.inflate(R.layout.f_experiment_configuration_metrics, container, false);
+        lvMetrics = (ListView) view.findViewById(R.id.lv_metrics);
+        activity = (ExperimentConfigurationControllerActivity) getActivity();
+        script = activity.getScript();
+        refreshList();
+//        lvMetrics.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
+        lvMetrics.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
-            public void onClick(View v) {
-                write(file.getText().toString(), prepareMsg(name.getText().toString(), info.getText().toString()));
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+//                Toast.makeText(getActivity(), metrics.get(position).getName(), Toast.LENGTH_SHORT).show();
+                script.getMetrics().get(position).setUsed(!script.getMetrics().get(position).isUsed());
+                refreshList();
             }
         });
-        read.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                show.setText(read(file.getText().toString()));
-            }
-        });
+//        lvMetrics.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+//            @Override
+//            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+//                Toast.makeText(getActivity(), metrics.get(position).getName(), Toast.LENGTH_SHORT).show();
+//                metrics.get(position).setUsed(!metrics.get(position).isUsed());
+//                adapter.notifyDataSetChanged();
+//            }
+//
+//            @Override
+//            public void onNothingSelected(AdapterView<?> parent) {
+//            }
+//        });
         return view;
     }
 
-//    private void checkPerm() {
+    private void refreshList() {
+        metrics = script.getMetrics();
+        if (metrics != null) {
+            adapter = new MetricAdapter(getContext(), metrics);
+            lvMetrics.setAdapter(adapter);
+        }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+    }
+
+    //    private void checkPerm() {
 //        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
 //            if (checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
 //                requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
@@ -90,8 +118,6 @@ public class ExperimentConfiguration extends Fragment {
             Log.i(TAG, e.getMessage());
             return "";
         }
-
-
     }
 
     private void write(String file, String msg) {

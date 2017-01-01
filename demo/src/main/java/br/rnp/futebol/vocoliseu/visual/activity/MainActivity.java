@@ -11,20 +11,17 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
-import android.support.design.widget.FloatingActionButton;
+import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
-import android.support.design.widget.Snackbar;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -37,23 +34,22 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
-import java.net.URISyntaxException;
 import java.util.ArrayList;
-import java.util.List;
 
 import br.rnp.futebol.vocoliseu.dao.TExpForListDAO;
-import br.rnp.futebol.vocoliseu.pojo.Metric;
+import br.rnp.futebol.vocoliseu.dao.TExperimentDAO;
+import br.rnp.futebol.vocoliseu.dao.TScriptDAO;
 import br.rnp.futebol.vocoliseu.pojo.TExperiment;
 import br.rnp.futebol.vocoliseu.pojo.TScript;
 import br.rnp.futebol.vocoliseu.util.adapter.ExperimentAdapter;
-import br.rnp.futebol.vocoliseu.util.adapter.MetricAdapter;
 import br.rnp.futebol.vocoliseu.util.adapter.SelectableExperimentAdapter;
+import br.rnp.futebol.vocoliseu.visual.activity.experiment.ExperimentGeneralActivity;
+import br.rnp.futebol.vocoliseu.visual.activity.script.ScriptGeneralActivity;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
     private ListView lvExperiments, lvAux;
-    private ExperimentAdapter adapter;
     private ArrayList<TExperiment> exps;
     private TExpForListDAO dao;
     private final int SELECT_FILE_CODE = 7;
@@ -85,22 +81,8 @@ public class MainActivity extends AppCompatActivity
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 TExperiment exp = exps.get(position);
-                int index = 0;
-                TScript first = exp.getScripts().get(index);
+                makeDialog(exp);
 
-                String provider = first.getProvider();
-
-                Bundle extras = new Bundle();
-                extras.putInt("index", index);
-                extras.putSerializable("experiment", exp);
-
-                Intent intent = new Intent((getBaseContext()), PlayerActivity.class);
-                intent.putExtras(extras);
-
-                intent.setData(Uri.parse(provider));
-                intent.setAction(PlayerActivity.ACTION_VIEW);
-
-                startActivity(intent);
             }
         });
 
@@ -213,7 +195,7 @@ public class MainActivity extends AppCompatActivity
     private void refreshList() {
         exps = dao.getExpsByNames(dao.getExpsNames());
         if (exps != null) {
-            adapter = new ExperimentAdapter(getBaseContext(), exps);
+            ExperimentAdapter adapter = new ExperimentAdapter(getBaseContext(), exps);
             lvExperiments.setAdapter(adapter);
         }
     }
@@ -241,24 +223,63 @@ public class MainActivity extends AppCompatActivity
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
+//        int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
 
         return super.onOptionsItemSelected(item);
     }
 
+    public AlertDialog makeDialog(final TExperiment exp) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage(exp.getInstruction());
+        builder.setTitle("Start Experiment ".concat(exp.getName()));
+        builder.setPositiveButton("Start", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                int index = 0;
+                TScript first = exp.getScripts().get(index);
+
+                String provider = first.getProvider();
+
+                Bundle extras = new Bundle();
+                extras.putInt("index", index);
+                extras.putSerializable("experiment", exp);
+
+                Intent intent = new Intent((getBaseContext()), PlayerActivity.class);
+                intent.putExtras(extras);
+
+                intent.setData(Uri.parse(provider));
+                intent.setAction(PlayerActivity.ACTION_VIEW);
+
+                startActivity(intent);
+            }
+        });
+        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+        AlertDialog dialog = builder.create();
+        dialog.show();
+        return dialog;
+    }
+
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
-    public boolean onNavigationItemSelected(MenuItem item) {
+    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         // Handle navigation view item clicks here.
         int id = item.getItemId();
         switch (id) {
             case (R.id.navigation_item_experiment):
-                startActivity(new Intent(this, ExperimentControllerActivity.class));
+                if ((new TScriptDAO(this)).getScriptsCount() > 0)
+                    startActivity(new Intent(this, ExperimentGeneralActivity.class));
+                else
+                    Toast.makeText(getBaseContext(), "No script has been created.\nBefore creating an experiments, configure some videos!", Toast.LENGTH_SHORT).show();
                 break;
             case (R.id.navigation_item_video):
-                startActivity(new Intent(this, ScriptControllerActivity.class));
+                startActivity(new Intent(this, ScriptGeneralActivity.class));
                 break;
             case (R.id.navigation_item_import):
                 Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
@@ -266,7 +287,10 @@ public class MainActivity extends AppCompatActivity
                 startActivityForResult(intent, SELECT_FILE_CODE);
                 break;
             case (R.id.navigation_item_export):
-                exportExps();
+                if ((new TExperimentDAO(this)).getExpsCount() > 0)
+                    exportExps();
+                else
+                    Toast.makeText(getBaseContext(), "No experiment available to export", Toast.LENGTH_SHORT).show();
                 break;
             default:
                 break;
@@ -282,7 +306,7 @@ public class MainActivity extends AppCompatActivity
     private void refreshExportList(ArrayList<TExperiment> exps, ArrayList<TExperiment> exps2) {
         for (TExperiment te : exps2)
             te.setUsedAux(false);
-        for (TExperiment e: exps)
+        for (TExperiment e : exps)
             for (TExperiment te : exps2)
                 if (te.getFilename().equals(e.getFilename()))
                     te.setUsedAux(true);

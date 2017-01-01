@@ -128,5 +128,13 @@ public class TScriptDAO extends SQLiteOpenHelper {
         }
     }
 
+    public int getScriptsCount() {
+        int count = 0;
+        Cursor c = getWritableDatabase().query(TABLE_NAME, COLUMNS, null, null, null, null, null);
+        while (c.moveToNext())
+            count++;
+        c.close();
+        return count;
+    }
 
 }

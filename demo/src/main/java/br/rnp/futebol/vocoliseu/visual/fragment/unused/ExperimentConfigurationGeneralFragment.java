@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package br.rnp.futebol.vocoliseu.visual.fragment;
+package br.rnp.futebol.vocoliseu.visual.fragment.unused;
 
 import android.os.Bundle;
 import android.os.Environment;
@@ -22,85 +22,97 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.ListView;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
+import android.widget.EditText;
 
 import br.rnp.futebol.vocoliseu.pojo.Script;
-import br.rnp.futebol.vocoliseu.pojo.Metric;
-import br.rnp.futebol.vocoliseu.util.adapter.MetricAdapter;
 import com.google.android.exoplayer2.demo.R;
 
-import br.rnp.futebol.vocoliseu.visual.activity.ExperimentConfigurationControllerActivity;
+import br.rnp.futebol.vocoliseu.visual.activity.unused.ExperimentConfigurationControllerActivity;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
-import java.io.BufferedWriter;
 import java.io.FileReader;
-import java.io.FileWriter;
 import java.io.IOException;
-import java.util.List;
 
 /**
  * An activity for selecting from a list of samples.
  */
-public class ExperimentConfigurationMetricsFragment extends Fragment {
+public class ExperimentConfigurationGeneralFragment extends Fragment {
 
-    private static final String TAG = "ExperimentConfiguration";
+    private static final String TAG = "ExpConfiguration1";
     private View view;
-    private Script script;
     private ExperimentConfigurationControllerActivity activity;
-    private ListView lvMetrics;
-    private List<Metric> metrics;
-    private MetricAdapter adapter;
+    private Script script;
+    private EditText etName, etFilename, etAddress, etIntruction;
+    private CheckBox cbAskInfo, cbUseDash;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        view = inflater.inflate(R.layout.f_experiment_configuration_metrics, container, false);
-        lvMetrics = (ListView) view.findViewById(R.id.lv_metrics);
+        view = inflater.inflate(R.layout.f_experiment_configuration_general, container, false);
         activity = (ExperimentConfigurationControllerActivity) getActivity();
         script = activity.getScript();
-        refreshList();
-//        lvMetrics.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
-        lvMetrics.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        init();
+
+        etName.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-//                Toast.makeText(getActivity(), metrics.get(position).getName(), Toast.LENGTH_SHORT).show();
-                script.getMetrics().get(position).setUsed(!script.getMetrics().get(position).isUsed());
-                refreshList();
+            public void onFocusChange(View v, boolean hasFocus) {
+                script.setName(etName.getText().toString());
             }
         });
-//        lvMetrics.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-//            @Override
-//            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-//                Toast.makeText(getActivity(), metrics.get(position).getName(), Toast.LENGTH_SHORT).show();
-//                metrics.get(position).setUsed(!metrics.get(position).isUsed());
-//                adapter.notifyDataSetChanged();
-//            }
-//
-//            @Override
-//            public void onNothingSelected(AdapterView<?> parent) {
-//            }
-//        });
+
+        etFilename.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                script.setFileName(etFilename.getText().toString());
+            }
+        });
+
+        etAddress.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                script.setAddress(etAddress.getText().toString());
+            }
+        });
+
+        etIntruction.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                script.setDescription(etIntruction.getText().toString());
+            }
+        });
+
+        cbAskInfo.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                script.setAskInfo(isChecked);
+            }
+        });
+
+        cbUseDash.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                script.setUseDash(isChecked);
+            }
+        });
+
         return view;
     }
 
-    private void refreshList() {
-        metrics = script.getMetrics();
-        if (metrics != null) {
-            adapter = new MetricAdapter(getContext(), metrics);
-            lvMetrics.setAdapter(adapter);
-        }
+    public void init() {
+        etName = (EditText) view.findViewById(R.id.et_exp_name);
+        etFilename = (EditText) view.findViewById(R.id.et_file_name);
+        etAddress = (EditText) view.findViewById(R.id.et_provider_ip);
+        etIntruction = (EditText) view.findViewById(R.id.et_instructions);
+        cbAskInfo = (CheckBox) view.findViewById(R.id.cb_ask_info);
+        cbUseDash = (CheckBox) view.findViewById(R.id.cb_use_dash);
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-    }
-
-    //    private void checkPerm() {
+//    private void checkPerm() {
 //        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
 //            if (checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
 //                requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
@@ -118,19 +130,8 @@ public class ExperimentConfigurationMetricsFragment extends Fragment {
             Log.i(TAG, e.getMessage());
             return "";
         }
-    }
 
-    private void write(String file, String msg) {
-        try {
-            String csv = Environment.getExternalStorageDirectory().getAbsolutePath() + "/".concat(file.concat(".txt"));
-            BufferedWriter output;
-            output = new BufferedWriter(new FileWriter(csv, true));
-            output.append(msg);
-            output.newLine();
-            output.close();
-        } catch (IOException e) {
-            Log.i(TAG, e.getMessage());
-        }
+
     }
 
     private String read(String file) {

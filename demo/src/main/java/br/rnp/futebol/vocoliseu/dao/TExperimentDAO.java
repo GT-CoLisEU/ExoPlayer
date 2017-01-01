@@ -1,6 +1,7 @@
 package br.rnp.futebol.vocoliseu.dao;
 
 import android.content.Context;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
@@ -33,6 +34,15 @@ public class TExperimentDAO extends SQLiteOpenHelper {
         String sb = "DROP TABLE IF EXISTS ".concat(TABLE_NAME.concat(";"));
         db.execSQL(sb);
         onCreate(db);
+    }
+
+    public int getExpsCount() {
+        int count = 0;
+        Cursor c = getWritableDatabase().query(TABLE_NAME, COLUMNS, null, null, null, null, null);
+        while (c.moveToNext())
+            count++;
+        c.close();
+        return count;
     }
 
 

@@ -15,10 +15,11 @@ public class TScript implements Serializable {
     private String video;
     private String extension;
     private String address;
+    private int loop;
     private boolean useDash, isUsedAux;
     private ArrayList<Integer> subjectiveQoeMetrics;
     private BinaryQuestion question;
-    private final String[] ATTRIBUTES = {"video", "extension", "address", "useDash", "subjectiveQoeMetrics", "question"};
+    private final String[] ATTRIBUTES = {"video", "extension", "address", "useDash", "subjectiveQoeMetrics", "question", "loop"};
 
     public String getVideo() {
         return video;
@@ -68,6 +69,14 @@ public class TScript implements Serializable {
         this.subjectiveQoeMetrics = subjectiveQoeMetrics;
     }
 
+    public int getLoop() {
+        return loop;
+    }
+
+    public void setLoop(int loop) {
+        this.loop = loop;
+    }
+
     public TScript fromJson(JSONObject json) {
         int cont = 0;
         try {
@@ -77,11 +86,12 @@ public class TScript implements Serializable {
             this.useDash = json.getBoolean(ATTRIBUTES[cont++]);
 
             this.subjectiveQoeMetrics = new ArrayList<>();
-            JSONArray qoe = json.getJSONArray(ATTRIBUTES[cont]);
+            JSONArray qoe = json.getJSONArray(ATTRIBUTES[cont++]);
 
             for (int i = 0; i < qoe.length(); i++)
                 subjectiveQoeMetrics.add((Integer) qoe.get(i));
 
+            this.loop = json.getInt(ATTRIBUTES[cont]);
         } catch (JSONException e) {
             return null;
         }
@@ -101,7 +111,8 @@ public class TScript implements Serializable {
                 array.put(i);
             json.put(ATTRIBUTES[cont++], array);
             if (this.question != null)
-                json.put(ATTRIBUTES[cont], this.question.toJson());
+                json.put(ATTRIBUTES[cont++], this.question.toJson());
+            json.put(ATTRIBUTES[cont], this.getLoop());
         } catch (JSONException e) {
             return null;
         }
@@ -118,7 +129,8 @@ public class TScript implements Serializable {
                 array.put(i);
             json.put(ATTRIBUTES[cont++], array);
             if (this.question != null)
-                json.put(ATTRIBUTES[cont], this.question.toJson());
+                json.put(ATTRIBUTES[cont++], this.question.toJson());
+            json.put(ATTRIBUTES[cont], this.getLoop());
         } catch (JSONException e) {
             return null;
         }
@@ -137,8 +149,8 @@ public class TScript implements Serializable {
             for (int i = 0; i < qoe.length(); i++)
                 subjectiveQoeMetrics.add((Integer) qoe.get(i));
 
-            this.question = new BinaryQuestion().fromJson(json.getJSONObject(ATTRIBUTES[cont]));
-
+            this.question = new BinaryQuestion().fromJson(json.getJSONObject(ATTRIBUTES[cont++]));
+            this.loop = json.getInt(ATTRIBUTES[cont]);
         } catch (JSONException e) {
             return null;
         }

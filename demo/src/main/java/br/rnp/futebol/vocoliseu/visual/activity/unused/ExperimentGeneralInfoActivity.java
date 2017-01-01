@@ -1,4 +1,4 @@
-package br.rnp.futebol.vocoliseu.visual.activity;
+package br.rnp.futebol.vocoliseu.visual.activity.unused;
 
 import android.os.Bundle;
 import android.os.PersistableBundle;

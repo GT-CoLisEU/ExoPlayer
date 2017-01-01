@@ -13,46 +13,26 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package br.rnp.futebol.vocoliseu.visual.fragment;
+package br.rnp.futebol.vocoliseu.visual.fragment.unused;
 
-import android.content.Intent;
-import android.media.Image;
 import android.os.Bundle;
-import android.os.Environment;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.ImageButton;
 import android.widget.ListView;
-import android.widget.Toast;
 
 import com.google.android.exoplayer2.demo.R;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
 import br.rnp.futebol.vocoliseu.dao.TScriptDAO;
-import br.rnp.futebol.vocoliseu.pojo.Metric;
-import br.rnp.futebol.vocoliseu.pojo.Script;
 import br.rnp.futebol.vocoliseu.pojo.TExperiment;
 import br.rnp.futebol.vocoliseu.pojo.TScript;
-import br.rnp.futebol.vocoliseu.util.adapter.MetricAdapter;
 import br.rnp.futebol.vocoliseu.util.adapter.ScriptAdapter;
-import br.rnp.futebol.vocoliseu.visual.activity.ExperimentConfigurationControllerActivity;
-import br.rnp.futebol.vocoliseu.visual.activity.ExperimentControllerActivity;
-import br.rnp.futebol.vocoliseu.visual.activity.ScriptControllerActivity;
+import br.rnp.futebol.vocoliseu.visual.activity.unused.ExperimentControllerActivity;
 
 /**
  * An activity for selecting from a list of samples.

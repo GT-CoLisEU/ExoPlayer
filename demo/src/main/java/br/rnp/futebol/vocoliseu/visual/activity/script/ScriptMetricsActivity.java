@@ -13,17 +13,19 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package br.rnp.futebol.vocoliseu.visual.fragment;
+package br.rnp.futebol.vocoliseu.visual.activity.script;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ListView;
 
 import com.google.android.exoplayer2.demo.R;
@@ -31,31 +33,32 @@ import com.google.android.exoplayer2.demo.R;
 import java.util.ArrayList;
 import java.util.List;
 
+import br.rnp.futebol.vocoliseu.dao.TScriptDAO;
 import br.rnp.futebol.vocoliseu.pojo.BinaryQuestion;
 import br.rnp.futebol.vocoliseu.pojo.Metric;
 import br.rnp.futebol.vocoliseu.pojo.TScript;
 import br.rnp.futebol.vocoliseu.util.ReadyMetrics;
 import br.rnp.futebol.vocoliseu.util.adapter.MetricAdapter;
-import br.rnp.futebol.vocoliseu.visual.activity.ScriptControllerActivity;
+import br.rnp.futebol.vocoliseu.visual.activity.MainActivity;
 
 /**
  * An activity for selecting from a list of samples.
  */
-public class ScriptMetricsFragment extends Fragment {
+public class ScriptMetricsActivity extends AppCompatActivity {
 
-    private static final String TAG = "ExperimentMetrics";
-    private View view;
+    //    private static final String TAG = "ExperimentMetrics";
+//    private View view;
     private ListView lvMetrics;
     private List<Metric> metrics;
-    private MetricAdapter adapter;
     private TScript script;
+    private ImageButton ibSave;
     private BinaryQuestion question = null;
     boolean deleted;
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        view = inflater.inflate(R.layout.script_metrics_fragment, container, false);
+        setContentView(R.layout.script_metrics_activity);
         init();
         lvMetrics.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -66,14 +69,25 @@ public class ScriptMetricsFragment extends Fragment {
                 refreshList();
             }
         });
-        return view;
+
+        ibSave.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                TScriptDAO dao = new TScriptDAO(getBaseContext());
+                dao.insert(script);
+                Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(intent);
+                finish();
+            }
+        });
     }
 
     private void operateMetricsList(ArrayList<Integer> metricsIds, int position) {
         boolean triedToDelete = false;
         if (ReadyMetrics.S_QOE_METRICS.get(position).getId() == ReadyMetrics.BINARY_QUESTION_ID)
             if (!metricsIds.contains(ReadyMetrics.BINARY_QUESTION_ID))
-                insertBinaryQuestion();
+                insertBinaryQuestion(metricsIds, position);
             else {
                 deleteBinaryQuestion(metricsIds, position);
                 triedToDelete = true;
@@ -94,7 +108,7 @@ public class ScriptMetricsFragment extends Fragment {
     }
 
     private boolean deleteBinaryQuestion(final ArrayList<Integer> metricsIds, final int position) {
-        AlertDialog.Builder alert = new AlertDialog.Builder(getActivity());
+        AlertDialog.Builder alert = new AlertDialog.Builder(this);
         deleted = false;
         alert.setTitle("Be careful!");
         alert.setMessage("Unchecking this option will delete the previous inserted question. Are you sure?");
@@ -118,15 +132,16 @@ public class ScriptMetricsFragment extends Fragment {
         return deleted;
     }
 
-    private void insertBinaryQuestion() {
-        AlertDialog.Builder alert = new AlertDialog.Builder(getActivity());
-        LayoutInflater inflater = getActivity().getLayoutInflater();
+    private void insertBinaryQuestion(final ArrayList<Integer> metricsIds, final int position) {
+        AlertDialog.Builder alert = new AlertDialog.Builder(this);
+        LayoutInflater inflater = getLayoutInflater();
         View view = inflater.inflate(R.layout.binary_question_form, null);
         final EditText etQuestion = (EditText) view.findViewById(R.id.et_binary_question);
         final EditText etAnswer1 = (EditText) view.findViewById(R.id.et_binary_answer_1);
         final EditText etAnswer2 = (EditText) view.findViewById(R.id.et_binary_answer_2);
 
         alert.setView(view);
+        alert.setCancelable(false);
         alert.setTitle("Type your question and answers");
         alert.setPositiveButton("save", new DialogInterface.OnClickListener() {
             @Override
@@ -143,6 +158,7 @@ public class ScriptMetricsFragment extends Fragment {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 dialog.dismiss();
+                operateAux(metricsIds, position);
             }
         });
         alert.show();
@@ -150,8 +166,21 @@ public class ScriptMetricsFragment extends Fragment {
     }
 
     private void init() {
-        script = ((ScriptControllerActivity) getActivity()).getScript();
-        lvMetrics = (ListView) view.findViewById(R.id.lv_script_metrics);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.tb_script_metrics_ac);
+        toolbar.setNavigationIcon(R.drawable.ic_arrow_back);
+        toolbar.setTitle("New experiment");
+        toolbar.setTitleTextAppearance(this, R.style.ToolbarTitleAppearance);
+        toolbar.setSubtitle("Select the metrics you want");
+        toolbar.setSubtitleTextAppearance(this, R.style.ToolbarSubtitleAppearance);
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
+        setSupportActionBar(toolbar);
+        lvMetrics = (ListView) findViewById(R.id.lv_script_metrics_ac);
+        ibSave = (ImageButton) findViewById(R.id.ib_script_final);
         metrics = new ArrayList<>();
     }
 
@@ -169,7 +198,7 @@ public class ScriptMetricsFragment extends Fragment {
                     if (id == m.getId())
                         m.setUsed(true);
         if (metrics != null) {
-            adapter = new MetricAdapter(getContext(), metrics);
+            MetricAdapter adapter = new MetricAdapter(this, metrics);
             lvMetrics.setAdapter(adapter);
         }
     }
@@ -177,7 +206,14 @@ public class ScriptMetricsFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        refreshList();
+        Bundle extras = null;
+        if (getIntent() != null)
+            extras = getIntent().getExtras();
+        script = (extras != null) ? (TScript) extras.getSerializable("script") : null;
+        if (script == null)
+            finish();
+        else
+            refreshList();
     }
 
 }

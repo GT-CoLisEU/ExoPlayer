@@ -13,33 +13,22 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package br.rnp.futebol.vocoliseu.visual.activity;
+package br.rnp.futebol.vocoliseu.visual.activity.unused;
 
 import android.os.Bundle;
-import android.os.Environment;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
 import com.google.android.exoplayer2.demo.R;
 
-import java.io.BufferedWriter;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.util.ArrayList;
-
 import br.rnp.futebol.vocoliseu.dao.TScriptDAO;
-import br.rnp.futebol.vocoliseu.pojo.Experiment;
-import br.rnp.futebol.vocoliseu.pojo.TExperiment;
 import br.rnp.futebol.vocoliseu.pojo.TScript;
-import br.rnp.futebol.vocoliseu.util.ReadyMetrics;
-import br.rnp.futebol.vocoliseu.util.adapter.ExpFragmentAdapter;
 import br.rnp.futebol.vocoliseu.util.adapter.ScriptFragmentAdapter;
-import br.rnp.futebol.vocoliseu.visual.fragment.ExperimentScriptsFragment;
+
 public class ScriptControllerActivity extends AppCompatActivity {
 
     private TScript script;
