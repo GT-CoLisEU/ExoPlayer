@@ -1,4 +1,4 @@
-package br.rnp.futebol.vocoliseu.pojo;
+package br.rnp.futebol.vocoliseu.pojo.unused;
 
 import java.util.ArrayList;
 

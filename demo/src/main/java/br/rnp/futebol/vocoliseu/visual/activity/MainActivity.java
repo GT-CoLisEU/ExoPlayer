@@ -14,10 +14,12 @@ import android.os.Environment;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
+import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -41,29 +43,35 @@ import br.rnp.futebol.vocoliseu.dao.TExperimentDAO;
 import br.rnp.futebol.vocoliseu.dao.TScriptDAO;
 import br.rnp.futebol.vocoliseu.pojo.TExperiment;
 import br.rnp.futebol.vocoliseu.pojo.TScript;
+import br.rnp.futebol.vocoliseu.util.adapter.DashboardFragmentAdapter;
 import br.rnp.futebol.vocoliseu.util.adapter.ExperimentAdapter;
 import br.rnp.futebol.vocoliseu.util.adapter.SelectableExperimentAdapter;
 import br.rnp.futebol.vocoliseu.visual.activity.experiment.ExperimentGeneralActivity;
 import br.rnp.futebol.vocoliseu.visual.activity.script.ScriptGeneralActivity;
+import br.rnp.futebol.vocoliseu.visual.fragment.ExpListFragment;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
-    private ListView lvExperiments, lvAux;
+    private ListView lvAux;
     private ArrayList<TExperiment> exps;
     private TExpForListDAO dao;
+    private Toolbar toolbar;
     private final int SELECT_FILE_CODE = 7;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        toolbar = (Toolbar) findViewById(R.id.toolbar);
+        toolbar.setSubtitle("Swipe to manage experiments and videos");
+        toolbar.setSubtitleTextAppearance(this, R.style.ToolbarSubtitleAppearance);
         setSupportActionBar(toolbar);
 
         checkPerm();
 
-        lvExperiments = (ListView) findViewById(R.id.lv_main_experiments);
+//        lvExperiments = (ListView) findViewById(R.id.lv_main_experiments);
+
         lvAux = new ListView(this);
 
 //        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab_experiment);
@@ -77,24 +85,22 @@ public class MainActivity extends AppCompatActivity
         dao = new TExpForListDAO(getBaseContext());
         exps = dao.getExpsByNames(dao.getExpsNames());
 
-        lvExperiments.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                TExperiment exp = exps.get(position);
-                makeDialog(exp);
+        ViewPager vpMain = (ViewPager) findViewById(R.id.vp_dashboard);
+        DashboardFragmentAdapter adapter;
+        if (exps == null || exps.isEmpty())
+            adapter = new DashboardFragmentAdapter(getSupportFragmentManager(), 1);
+        else
+            adapter = new DashboardFragmentAdapter(getSupportFragmentManager(), 2);
+        vpMain.setAdapter(adapter);
 
-            }
-        });
-
-        lvExperiments.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
-            @Override
-            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
-                Intent mailClient = new Intent(Intent.ACTION_VIEW);
-                mailClient.setClassName("com.google.android.gm", "com.google.android.gm.ConversationListActivity");
-                startActivity(mailClient);
-                return false;
-            }
-        });
+//        lvExperiments.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+//            @Override
+//            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+//                TExperiment exp = exps.get(position);
+//                makeDialog(exp);
+//
+//            }
+//        });
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -104,6 +110,10 @@ public class MainActivity extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+    }
+
+    public Toolbar getToolbar() {
+        return toolbar;
     }
 
     @Override
@@ -154,12 +164,14 @@ public class MainActivity extends AppCompatActivity
                 dao.insert(experiment);
                 dao.close();
                 refreshList();
+//                refreshList();
                 success = true;
             }
         } catch (Exception e) {
             // eat it
+            Log.i("erro", e.getMessage());
         }
-        Toast.makeText(getBaseContext(), success ? "Success!" : "Could not lad the file.", Toast.LENGTH_SHORT).show();
+        Toast.makeText(getBaseContext(), success ? "Success!" : "Could not load the file.", Toast.LENGTH_SHORT).show();
     }
 
     private String read(String file) {
@@ -179,8 +191,14 @@ public class MainActivity extends AppCompatActivity
     @Override
     protected void onResume() {
         super.onResume();
-        refreshList();
+//        refreshList();
     }
+
+    public void refreshList() {
+        ExpListFragment fragment = new ExpListFragment();
+        fragment.refreshList();
+    }
+
 
     @Override
     public void onBackPressed() {
@@ -192,13 +210,13 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
-    private void refreshList() {
-        exps = dao.getExpsByNames(dao.getExpsNames());
-        if (exps != null) {
-            ExperimentAdapter adapter = new ExperimentAdapter(getBaseContext(), exps);
-            lvExperiments.setAdapter(adapter);
-        }
-    }
+//    private void refreshList() {
+//        exps = dao.getExpsByNames(dao.getExpsNames());
+//        if (exps != null) {
+//            ExperimentAdapter adapter = new ExperimentAdapter(getBaseContext(), exps);
+//            lvExperiments.setAdapter(adapter);
+//        }
+//    }
 
     private void checkPerm() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
@@ -230,41 +248,47 @@ public class MainActivity extends AppCompatActivity
         return super.onOptionsItemSelected(item);
     }
 
-    public AlertDialog makeDialog(final TExperiment exp) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setMessage(exp.getInstruction());
-        builder.setTitle("Start Experiment ".concat(exp.getName()));
-        builder.setPositiveButton("Start", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                int index = 0;
-                TScript first = exp.getScripts().get(index);
-
-                String provider = first.getProvider();
-
-                Bundle extras = new Bundle();
-                extras.putInt("index", index);
-                extras.putSerializable("experiment", exp);
-
-                Intent intent = new Intent((getBaseContext()), PlayerActivity.class);
-                intent.putExtras(extras);
-
-                intent.setData(Uri.parse(provider));
-                intent.setAction(PlayerActivity.ACTION_VIEW);
-
-                startActivity(intent);
-            }
-        });
-        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                dialog.dismiss();
-            }
-        });
-        AlertDialog dialog = builder.create();
-        dialog.show();
-        return dialog;
-    }
+//    public AlertDialog makeDialog(final TExperiment exp) {
+//        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+//        builder.setMessage(exp.getInstruction());
+//        builder.setTitle("Start ".concat(exp.getName()));
+//        builder.setPositiveButton("Start", new DialogInterface.OnClickListener() {
+//            @Override
+//            public void onClick(DialogInterface dialog, int which) {
+//                int index = 0;
+//                TScript first = exp.getScripts().get(index);
+//
+//                String provider = first.getProvider();
+//
+//                Bundle extras = new Bundle();
+//                extras.putInt("index", index);
+//                extras.putInt("loop", 1);
+//                extras.putSerializable("experiment", exp);
+//
+//                Intent intent;
+//                if (exp.isAskInfo()) {
+//                    intent = new Intent((getBaseContext()), UserActivity.class);
+//                    extras.putString("provider", provider);
+//                } else {
+//                    intent = new Intent((getBaseContext()), PlayerActivity.class);
+//                    intent.setData(Uri.parse(provider));
+//                    intent.setAction(PlayerActivity.ACTION_VIEW);
+//                }
+//                intent.putExtras(extras);
+//
+//                startActivity(intent);
+//            }
+//        });
+//        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+//            @Override
+//            public void onClick(DialogInterface dialog, int which) {
+//                dialog.dismiss();
+//            }
+//        });
+//        AlertDialog dialog = builder.create();
+//        dialog.show();
+//        return dialog;
+//    }
 
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
@@ -276,7 +300,7 @@ public class MainActivity extends AppCompatActivity
                 if ((new TScriptDAO(this)).getScriptsCount() > 0)
                     startActivity(new Intent(this, ExperimentGeneralActivity.class));
                 else
-                    Toast.makeText(getBaseContext(), "No script has been created.\nBefore creating an experiments, configure some videos!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getBaseContext(), "No video has been created.\nBefore creating an experiment, configure some videos!", Toast.LENGTH_LONG).show();
                 break;
             case (R.id.navigation_item_video):
                 startActivity(new Intent(this, ScriptGeneralActivity.class));
@@ -287,11 +311,20 @@ public class MainActivity extends AppCompatActivity
                 startActivityForResult(intent, SELECT_FILE_CODE);
                 break;
             case (R.id.navigation_item_export):
-                if ((new TExperimentDAO(this)).getExpsCount() > 0)
-                    exportExps();
-                else
-                    Toast.makeText(getBaseContext(), "No experiment available to export", Toast.LENGTH_SHORT).show();
+                if (dao.getExpsNames() != null)
+                    if (dao.getExpsNames().size() > 0) {
+                        exportExps();
+                        break;
+                    }
+                Toast.makeText(getBaseContext(), "No experiment available to export", Toast.LENGTH_SHORT).show();
                 break;
+            case (R.id.navigation_item_tutorial):
+                Intent itInst = new Intent(getBaseContext(), InstructionsActivity.class);
+                itInst.putExtra("start", false);
+                startActivity(itInst);
+                break;
+            case (R.id.navigation_item_about):
+                startActivity(new Intent(getBaseContext(), AboutActivity.class));
             default:
                 break;
 

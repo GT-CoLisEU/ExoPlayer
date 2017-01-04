@@ -8,18 +8,14 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.os.Environment;
 import android.util.Log;
 
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.List;
 
-import br.rnp.futebol.vocoliseu.pojo.Experiment;
 import br.rnp.futebol.vocoliseu.pojo.TExperiment;
-import br.rnp.futebol.vocoliseu.pojo.TScript;
 
 /**
  * [UFRGS] VO-CoLisEU
@@ -92,7 +88,7 @@ public class TExpForListDAO extends SQLiteOpenHelper {
      */
     public void delete(String filename) {
 //        if (checkFile(exp.getFileName())) {
-        getWritableDatabase().delete(TABLE_NAME, COLUMNS[1].concat(" = ?"), new String[]{filename});
+        getWritableDatabase().delete(TABLE_NAME, COLUMNS[0].concat(" = ?"), new String[]{filename});
 //        }
     }
 
@@ -112,6 +108,7 @@ public class TExpForListDAO extends SQLiteOpenHelper {
             c.close();
             return exps;
         } catch (Exception e) {
+            Log.i("ERRO", e.getMessage());
             return null;
         }
     }
@@ -120,7 +117,11 @@ public class TExpForListDAO extends SQLiteOpenHelper {
         ArrayList<TExperiment> exps = new ArrayList<>();
         try {
             for (String s : names) {
-                exps.add(new TExperiment().fromJson(new JSONObject(read(s))));
+                try {
+                    exps.add(new TExperiment().fromJson(new JSONObject(read(s))));
+                } catch (Exception e) {
+                    Log.i("TExpForListDAO", "Error while reading file");
+                }
             }
         } catch (Exception e) {
             return null;

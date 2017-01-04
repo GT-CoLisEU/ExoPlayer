@@ -26,7 +26,7 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 
-import br.rnp.futebol.vocoliseu.pojo.Script;
+import br.rnp.futebol.vocoliseu.pojo.unused.Script;
 import com.google.android.exoplayer2.demo.R;
 
 import br.rnp.futebol.vocoliseu.visual.activity.unused.ExperimentConfigurationControllerActivity;

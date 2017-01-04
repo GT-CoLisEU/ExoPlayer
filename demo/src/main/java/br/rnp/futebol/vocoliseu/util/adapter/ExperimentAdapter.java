@@ -7,7 +7,6 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
-import br.rnp.futebol.vocoliseu.pojo.Script;
 import br.rnp.futebol.vocoliseu.pojo.TExperiment;
 
 import com.google.android.exoplayer2.demo.R;

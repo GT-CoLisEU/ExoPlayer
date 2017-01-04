@@ -1,4 +1,4 @@
-package br.rnp.futebol.vocoliseu.dao;
+package br.rnp.futebol.vocoliseu.dao.unused;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -6,7 +6,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
-import br.rnp.futebol.vocoliseu.pojo.Script;
+import br.rnp.futebol.vocoliseu.pojo.unused.Script;
 
 import java.util.ArrayList;
 import java.util.List;

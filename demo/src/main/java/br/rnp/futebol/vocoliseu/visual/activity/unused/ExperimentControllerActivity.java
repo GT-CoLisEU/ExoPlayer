@@ -28,24 +28,13 @@ import android.widget.Toast;
 
 import com.google.android.exoplayer2.demo.R;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.io.BufferedReader;
 import java.io.BufferedWriter;
-import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.ArrayList;
 
-import br.rnp.futebol.vocoliseu.dao.ScriptDAO;
 import br.rnp.futebol.vocoliseu.dao.TExpForListDAO;
-import br.rnp.futebol.vocoliseu.pojo.Metric;
-import br.rnp.futebol.vocoliseu.pojo.Script;
 import br.rnp.futebol.vocoliseu.pojo.TExperiment;
-import br.rnp.futebol.vocoliseu.util.ReadyMetrics;
 import br.rnp.futebol.vocoliseu.util.adapter.ExpFragmentAdapter;
-import br.rnp.futebol.vocoliseu.util.adapter.FragmentAdapter;
 
 public class ExperimentControllerActivity extends AppCompatActivity {
 

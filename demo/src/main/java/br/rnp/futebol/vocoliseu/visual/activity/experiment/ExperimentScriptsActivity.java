@@ -28,6 +28,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ImageButton;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.google.android.exoplayer2.demo.R;
 
@@ -88,16 +89,23 @@ public class ExperimentScriptsActivity extends AppCompatActivity {
             }
         });
         ibFinal.setOnClickListener(new View.OnClickListener() {
+            String msg;
+
             @Override
             public void onClick(View v) {
-                write(experiment.getFilename(), experiment.toJson().toString());
-                TExpForListDAO dao = new TExpForListDAO(getBaseContext());
-                dao.insert(experiment);
-                dao.close();
-                Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                startActivity(intent);
-                finish();
+                if (experiment.getScripts() != null && !experiment.getScripts().isEmpty()) {
+                    write(experiment.getFilename(), experiment.toJson().toString());
+                    TExpForListDAO dao = new TExpForListDAO(getBaseContext());
+                    dao.insert(experiment);
+                    dao.close();
+                    msg = "Experiment configured!";
+                    Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    startActivity(intent);
+                    finish();
+                } else
+                    msg = "At least one video should be selected";
+                    Toast.makeText(getBaseContext(), msg, Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -124,6 +132,7 @@ public class ExperimentScriptsActivity extends AppCompatActivity {
         toolbar.setTitleTextAppearance(this, R.style.ToolbarTitleAppearance);
         toolbar.setSubtitle("Select which videos will be displayed");
         toolbar.setSubtitleTextAppearance(this, R.style.ToolbarSubtitleAppearance);
+        setSupportActionBar(toolbar);
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

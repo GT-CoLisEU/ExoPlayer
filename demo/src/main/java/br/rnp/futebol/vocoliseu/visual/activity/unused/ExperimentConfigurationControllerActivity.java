@@ -26,8 +26,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
-import br.rnp.futebol.vocoliseu.dao.ScriptDAO;
-import br.rnp.futebol.vocoliseu.pojo.Script;
+import br.rnp.futebol.vocoliseu.dao.unused.ScriptDAO;
+import br.rnp.futebol.vocoliseu.pojo.unused.Script;
 import br.rnp.futebol.vocoliseu.util.adapter.FragmentAdapter;
 import br.rnp.futebol.vocoliseu.pojo.Metric;
 import com.google.android.exoplayer2.demo.R;

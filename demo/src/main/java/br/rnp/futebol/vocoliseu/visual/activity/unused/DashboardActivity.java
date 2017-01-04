@@ -18,8 +18,8 @@ import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.Toast;
 
-import br.rnp.futebol.vocoliseu.dao.ScriptDAO;
-import br.rnp.futebol.vocoliseu.pojo.Script;
+import br.rnp.futebol.vocoliseu.dao.unused.ScriptDAO;
+import br.rnp.futebol.vocoliseu.pojo.unused.Script;
 import br.rnp.futebol.vocoliseu.util.adapter.ExperimentAdapter;
 
 import com.google.android.exoplayer2.demo.PlayerActivity;

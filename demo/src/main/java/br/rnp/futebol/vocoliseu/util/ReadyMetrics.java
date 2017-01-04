@@ -10,7 +10,7 @@ import br.rnp.futebol.vocoliseu.pojo.Metric;
 public class ReadyMetrics {
 
     public static ArrayList<Metric> QOS_METRICS, S_QOE_METRICS, O_QOE_METRICS;
-    public static int BINARY_QUESTION_ID;
+    public static int BINARY_QUESTION_ID, ACR_ID, DCR_ID;
 
     public static void init() {
         int id = 0;
@@ -23,7 +23,9 @@ public class ReadyMetrics {
         QOS_METRICS.add(new Metric(++id, "Packet Loss", Metric.QOS));
 
         S_QOE_METRICS.add(new Metric(++id, "ACR scale", Metric.S_QOE));
+        ACR_ID = id;
         S_QOE_METRICS.add(new Metric(++id, "DCR scale", Metric.S_QOE));
+        DCR_ID = id;
         S_QOE_METRICS.add(new Metric(++id, "Binary Question", Metric.S_QOE));
         BINARY_QUESTION_ID = id;
 

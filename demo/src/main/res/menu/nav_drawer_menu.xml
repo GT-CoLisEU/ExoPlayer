@@ -1,31 +1,40 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="nkdroid.tutorial.navigationview.MainActivity">
-    <group android:checkableBehavior="single">
+
+    <group android:id="@+id/grp_exp"
+        android:checkableBehavior="single">
         <item
             android:id="@+id/navigation_item_experiment"
             android:icon="@drawable/ic_experiment_icon"
-            android:title="New Experiment" />
+            android:title="@string/new_experiment" />
         <item
             android:id="@+id/navigation_item_import"
-            android:icon="@android:drawable/ic_menu_revert"
-            android:title="Import Experiment" />
+            android:icon="@drawable/ic_arrow_back"
+            android:title="@string/import_experiment" />
         <item
             android:id="@+id/navigation_item_export"
-            android:icon="@android:drawable/ic_menu_directions"
-            android:title="Export Experiment" />
+            android:icon="@drawable/ic_arrow_right"
+            android:title="@string/export_experiment" />
     </group>
-    <group android:checkableBehavior="single">
+
+    <group android:id="@+id/grp_video"
+        android:checkableBehavior="single">
         <item
             android:id="@+id/navigation_item_video"
             android:icon="@drawable/ic_temp_icon_white"
-            android:title="New video" />
+            android:title="@string/new_video" />
     </group>
 
-    <group android:checkableBehavior="single">
+    <group android:id="@+id/grp_others"
+        android:checkableBehavior="single">
+        <item
+            android:id="@+id/navigation_item_tutorial"
+            android:icon="@drawable/ic_tutorial"
+            android:title="@string/tutorial" />
         <item
             android:id="@+id/navigation_item_about"
-            android:icon="@drawable/ic_temp_icon_white"
-            android:title="About" />
+            android:icon="@drawable/ic_about"
+            android:title="@string/about" />
     </group>
 </menu>

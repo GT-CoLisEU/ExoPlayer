@@ -26,13 +26,13 @@
 
     <application
         android:allowBackup="false"
-        android:icon="@drawable/ic_temp_icon_white"
+        android:icon="@drawable/vo_icon"
         android:label="@string/application_name"
         android:largeHeap="true">
 
         <!--android:label="@string/application_name"-->
         <activity
-            android:name="br.rnp.futebol.vocoliseu.visual.activity.MainActivity"
+            android:name="br.rnp.futebol.vocoliseu.visual.activity.InstructionsActivity"
             android:theme="@style/VOCoLisEU">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -65,12 +65,24 @@
             android:theme="@style/VOCoLisEU"/>
 
         <activity
+            android:name="br.rnp.futebol.vocoliseu.visual.activity.MainActivity"
+            android:theme="@style/VOCoLisEU"/>
+
+        <activity
+            android:name="br.rnp.futebol.vocoliseu.visual.activity.AboutActivity"
+            android:theme="@style/VOCoLisEU"/>
+
+        <activity
             android:name="br.rnp.futebol.vocoliseu.visual.activity.experiment.ExperimentMetricsActivity"
             android:theme="@style/VOCoLisEU"/>
+
         <activity
             android:name="br.rnp.futebol.vocoliseu.visual.activity.experiment.ExperimentScriptsActivity"
             android:theme="@style/VOCoLisEU"/>
 
+        <activity
+            android:name="br.rnp.futebol.vocoliseu.visual.activity.UserActivity"
+            android:theme="@style/VOCoLisEU"/>
 
         <activity
             android:name="br.rnp.futebol.vocoliseu.visual.activity.unused.ExperimentControllerActivity"

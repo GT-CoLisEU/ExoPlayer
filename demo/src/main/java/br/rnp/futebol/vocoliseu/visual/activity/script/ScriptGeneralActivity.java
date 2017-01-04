@@ -96,15 +96,15 @@ public class ScriptGeneralActivity extends AppCompatActivity {
         toolbar.setNavigationIcon(R.drawable.ic_arrow_back);
         toolbar.setTitle("New Video");
         toolbar.setTitleTextAppearance(this, R.style.ToolbarTitleAppearance);
-        toolbar.setSubtitle("Provide the necessary informayion");
+        toolbar.setSubtitle("Provide the necessary information");
         toolbar.setSubtitleTextAppearance(this, R.style.ToolbarSubtitleAppearance);
+        setSupportActionBar(toolbar);
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 finish();
             }
         });
-        setSupportActionBar(toolbar);
         etAddress = (EditText) findViewById(R.id.et_provider_address_ac);
         etVideo = (EditText) findViewById(R.id.et_video_name_ac);
         etExtension = (EditText) findViewById(R.id.et_video_extension_ac);

@@ -27,7 +27,6 @@
         android:layout_marginStart="10dp"
         android:layout_marginTop="7dp"
         android:textStyle="bold"
-        android:textSize="16sp"
         android:layout_alignParentTop="true"
         android:layout_toEndOf="@+id/img_static_icon" />
 
@@ -43,6 +42,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/ipport"
+        android:layout_marginBottom="5dp"
         android:id="@+id/tv_exp_item_address"
         android:layout_below="@+id/tv_exp_item_filename"
         android:layout_alignStart="@+id/tv_exp_item_filename" />
@@ -52,12 +52,11 @@
         android:layout_height="40dp"
         android:contentDescription="@string/script"
         android:layout_marginStart="6dp"
-        android:src="@drawable/ic_experiment_icon"
-        android:background="@drawable/circle_no_shadow"
+        android:src="@drawable/vo_icon"
         android:id="@+id/img_static_icon"
         android:layout_alignTop="@+id/tv_exp_item_name"
         android:layout_alignParentStart="true"
-        android:layout_marginTop="5dp" />
+        android:layout_marginTop="7dp" />
 
     <!--<CheckBox-->
         <!--android:layout_width="wrap_content"-->

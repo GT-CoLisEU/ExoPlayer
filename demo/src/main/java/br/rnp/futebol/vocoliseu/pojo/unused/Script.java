@@ -1,4 +1,4 @@
-package br.rnp.futebol.vocoliseu.pojo;
+package br.rnp.futebol.vocoliseu.pojo.unused;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -6,6 +6,8 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import br.rnp.futebol.vocoliseu.pojo.Metric;
 
 /**
  * [UFRGS] VO-CoLisEU

@@ -1,4 +1,4 @@
-package br.rnp.futebol.vocoliseu.dao;
+package br.rnp.futebol.vocoliseu.dao.unused;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;

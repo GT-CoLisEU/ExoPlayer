@@ -27,6 +27,7 @@ import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.google.android.exoplayer2.demo.R;
 
@@ -75,6 +76,7 @@ public class ScriptMetricsActivity extends AppCompatActivity {
             public void onClick(View v) {
                 TScriptDAO dao = new TScriptDAO(getBaseContext());
                 dao.insert(script);
+                Toast.makeText(getBaseContext(), "Video registered! Now you can use it on new experiments.", Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent(getApplicationContext(), MainActivity.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(intent);
@@ -168,17 +170,17 @@ public class ScriptMetricsActivity extends AppCompatActivity {
     private void init() {
         Toolbar toolbar = (Toolbar) findViewById(R.id.tb_script_metrics_ac);
         toolbar.setNavigationIcon(R.drawable.ic_arrow_back);
-        toolbar.setTitle("New experiment");
+        toolbar.setTitle("New video");
         toolbar.setTitleTextAppearance(this, R.style.ToolbarTitleAppearance);
         toolbar.setSubtitle("Select the metrics you want");
         toolbar.setSubtitleTextAppearance(this, R.style.ToolbarSubtitleAppearance);
+        setSupportActionBar(toolbar);
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 finish();
             }
         });
-        setSupportActionBar(toolbar);
         lvMetrics = (ListView) findViewById(R.id.lv_script_metrics_ac);
         ibSave = (ImageButton) findViewById(R.id.ib_script_final);
         metrics = new ArrayList<>();

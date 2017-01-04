@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:background="@color/def"
+    android:layout_height="match_parent">
+
+
+    <ImageView
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+        android:id="@+id/img_about"
+        android:background="@drawable/vo_icon_white"
+        android:layout_centerVertical="true"
+        android:layout_centerHorizontal="true" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/application_name"
+        android:textColor="@color/wht"
+        android:textStyle="bold"
+        android:textSize="24sp"
+        android:id="@+id/tv_about_1"
+        android:layout_above="@+id/tv_about_2"
+        android:layout_centerHorizontal="true" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/version"
+        android:id="@+id/tv_about_2"
+        android:textColor="@color/wht"
+        android:layout_marginBottom="20dp"
+        android:layout_marginTop="5dp"
+        android:layout_above="@+id/img_about"
+        android:layout_centerHorizontal="true" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/developed"
+        android:textColor="@color/wht"
+        android:id="@+id/tv_about_3"
+        android:gravity="center"
+        android:layout_marginTop="20dp"
+        android:layout_below="@+id/img_about"
+        android:layout_centerHorizontal="true" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/futebol"
+        android:textColor="@color/wht"
+        android:id="@+id/tv_about_4"
+        android:layout_marginTop="5dp"
+        android:layout_below="@+id/tv_about_3"
+        android:layout_centerHorizontal="true" />
+
+    <!--<RelativeLayout-->
+        <!--android:id="@+id/rel_border_left"-->
+        <!--android:layout_width="50dp"-->
+        <!--android:layout_height="match_parent"-->
+        <!--android:layout_alignParentStart="true"/>-->
+<!---->
+    <!--<RelativeLayout-->
+        <!--android:layout_width="50dp"-->
+        <!--android:id="@+id/rel_border_right"-->
+        <!--android:layout_height="match_parent"-->
+        <!--android:layout_alignParentEnd="true"/>-->
+
+</RelativeLayout>

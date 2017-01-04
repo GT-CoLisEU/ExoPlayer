@@ -25,7 +25,6 @@ import android.text.TextUtils;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -58,7 +57,6 @@ import com.google.android.exoplayer2.trackselection.DefaultTrackSelector;
 import com.google.android.exoplayer2.trackselection.MappingTrackSelector;
 import com.google.android.exoplayer2.trackselection.MappingTrackSelector.TrackInfo;
 import com.google.android.exoplayer2.trackselection.TrackSelection;
-import com.google.android.exoplayer2.ui.DebugTextViewHelper;
 import com.google.android.exoplayer2.ui.PlaybackControlView;
 import com.google.android.exoplayer2.ui.SimpleExoPlayerView;
 import com.google.android.exoplayer2.upstream.DataSource;
@@ -116,7 +114,7 @@ public class PlayerActivity extends Activity implements OnClickListener, ExoPlay
     private SimpleExoPlayer player;
     private MappingTrackSelector trackSelector;
     private TrackSelectionHelper trackSelectionHelper;
-    private VODebugTextViewHelper debugViewHelper;
+    private VOPlayerHelper debugViewHelper;
     private boolean playerNeedsSource;
 
     private boolean shouldAutoPlay;
@@ -224,12 +222,15 @@ public class PlayerActivity extends Activity implements OnClickListener, ExoPlay
     private void initializePlayer() {
         Intent intent = getIntent();
         TExperiment experiment = null;
-        int index = -1;
+        int index = -1, loop = -1;
+        String userInfo = null;
         if (intent.getExtras() != null) {
             experiment = (TExperiment) intent.getExtras().getSerializable("experiment");
             index = intent.getExtras().getInt("index");
+            loop = intent.getExtras().getInt("loop", 1);
+            userInfo = intent.getExtras().getString("userInfo");
         }
-        if (experiment != null && index != -1) {
+        if (experiment != null && index != -1 && loop != -1) {
             if (player == null) {
                 boolean preferExtensionDecoders = intent.getBooleanExtra(PREFER_EXTENSION_DECODERS, false);
                 UUID drmSchemeUuid = intent.hasExtra(DRM_SCHEME_UUID_EXTRA)
@@ -283,7 +284,7 @@ public class PlayerActivity extends Activity implements OnClickListener, ExoPlay
                     }
                 }
                 player.setPlayWhenReady(shouldAutoPlay);
-                debugViewHelper = new VODebugTextViewHelper(player, debugTextView, experiment, this, index);
+                debugViewHelper = new VOPlayerHelper(player, debugTextView, experiment, this, index, loop, userInfo);
                 debugViewHelper.start();
                 playerNeedsSource = true;
             }
@@ -324,6 +325,7 @@ public class PlayerActivity extends Activity implements OnClickListener, ExoPlay
             }
         } else {
             Toast.makeText(getBaseContext(), "Couldn't display video", Toast.LENGTH_SHORT).show();
+            finish();
         }
     }
 

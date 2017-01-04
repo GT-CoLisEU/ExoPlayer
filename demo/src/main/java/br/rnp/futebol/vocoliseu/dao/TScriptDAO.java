@@ -12,7 +12,6 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
-import br.rnp.futebol.vocoliseu.pojo.Script;
 import br.rnp.futebol.vocoliseu.pojo.TScript;
 
 /**
@@ -108,9 +107,9 @@ public class TScriptDAO extends SQLiteOpenHelper {
      *
      * @return the saved experiments
      */
-    public List<TScript> getScripts() {
+    public ArrayList<TScript> getScripts() {
         try {
-            List<TScript> exps = new ArrayList<>();
+            ArrayList<TScript> exps = new ArrayList<>();
             Cursor c = getWritableDatabase().query(TABLE_NAME, COLUMNS, null, null, null, null, null);
             while (c.moveToNext()) {
                 int cont = 0;

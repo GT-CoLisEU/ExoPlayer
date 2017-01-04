@@ -95,13 +95,13 @@ public class ExperimentMetricsActivity extends AppCompatActivity {
         toolbar.setTitleTextAppearance(this, R.style.ToolbarTitleAppearance);
         toolbar.setSubtitle("Select the metrics you want");
         toolbar.setSubtitleTextAppearance(this, R.style.ToolbarSubtitleAppearance);
+        setSupportActionBar(toolbar);
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 finish();
             }
         });
-        setSupportActionBar(toolbar);
         ibPt3 = (ImageButton) findViewById(R.id.ib_exp_pt3);
         lvMetrics = (ListView) findViewById(R.id.lv_exp_metrics_ac);
         metrics = new ArrayList<>();

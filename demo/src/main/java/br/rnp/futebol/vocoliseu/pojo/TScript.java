@@ -1,5 +1,7 @@
 package br.rnp.futebol.vocoliseu.pojo;
 
+import android.util.Log;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -7,9 +9,6 @@ import org.json.JSONObject;
 import java.io.Serializable;
 import java.util.ArrayList;
 
-/**
- * Created by camargo on 11/11/16.
- */
 public class TScript implements Serializable {
 
     private String video;
@@ -90,8 +89,10 @@ public class TScript implements Serializable {
 
             for (int i = 0; i < qoe.length(); i++)
                 subjectiveQoeMetrics.add((Integer) qoe.get(i));
-
-            this.loop = json.getInt(ATTRIBUTES[cont]);
+            if (json.has(ATTRIBUTES[cont]))
+                this.question = new BinaryQuestion().fromJson(json.getJSONObject(ATTRIBUTES[cont]));
+            if (json.has(ATTRIBUTES[++cont]))
+                this.loop = json.getInt(ATTRIBUTES[cont]);
         } catch (JSONException e) {
             return null;
         }
@@ -111,8 +112,8 @@ public class TScript implements Serializable {
                 array.put(i);
             json.put(ATTRIBUTES[cont++], array);
             if (this.question != null)
-                json.put(ATTRIBUTES[cont++], this.question.toJson());
-            json.put(ATTRIBUTES[cont], this.getLoop());
+                json.put(ATTRIBUTES[cont], this.question.toJson());
+            json.put(ATTRIBUTES[++cont], this.getLoop());
         } catch (JSONException e) {
             return null;
         }
@@ -129,13 +130,12 @@ public class TScript implements Serializable {
                 array.put(i);
             json.put(ATTRIBUTES[cont++], array);
             if (this.question != null)
-                json.put(ATTRIBUTES[cont++], this.question.toJson());
-            json.put(ATTRIBUTES[cont], this.getLoop());
+                json.put(ATTRIBUTES[cont], this.question.toJson());
+            json.put(ATTRIBUTES[++cont], this.getLoop());
         } catch (JSONException e) {
             return null;
         }
         return json;
-
     }
 
     public TScript fromSimplesJson(JSONObject json) {
@@ -144,13 +144,15 @@ public class TScript implements Serializable {
             this.useDash = json.getBoolean(ATTRIBUTES[cont++]);
 
             this.subjectiveQoeMetrics = new ArrayList<>();
-            JSONArray qoe = json.getJSONArray(ATTRIBUTES[cont++]);
-
-            for (int i = 0; i < qoe.length(); i++)
-                subjectiveQoeMetrics.add((Integer) qoe.get(i));
-
-            this.question = new BinaryQuestion().fromJson(json.getJSONObject(ATTRIBUTES[cont++]));
-            this.loop = json.getInt(ATTRIBUTES[cont]);
+            if (json.has(ATTRIBUTES[cont])) {
+                JSONArray qoe = json.getJSONArray(ATTRIBUTES[cont]);
+                for (int i = 0; i < qoe.length(); i++)
+                    subjectiveQoeMetrics.add((Integer) qoe.get(i));
+            }
+            if (json.has(ATTRIBUTES[++cont]))
+                this.question = new BinaryQuestion().fromJson(json.getJSONObject(ATTRIBUTES[cont]));
+            if (json.has(ATTRIBUTES[++cont]))
+                this.loop = json.getInt(ATTRIBUTES[cont]);
         } catch (JSONException e) {
             return null;
         }

@@ -99,13 +99,13 @@ public class ExperimentGeneralActivity extends AppCompatActivity {
         toolbar.setTitleTextAppearance(this, R.style.ToolbarTitleAppearance);
         toolbar.setSubtitle("Provide the necessary information");
         toolbar.setSubtitleTextAppearance(this, R.style.ToolbarSubtitleAppearance);
+        setSupportActionBar(toolbar);
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 finish();
             }
         });
-        setSupportActionBar(toolbar);
         etName = (EditText) findViewById(R.id.et_exp_name_ac);
         etFilename = (EditText) findViewById(R.id.et_file_name_ac);
         etInstructions = (EditText) findViewById(R.id.et_instructions_ac);

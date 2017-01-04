@@ -25,7 +25,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
-import br.rnp.futebol.vocoliseu.pojo.Script;
+import br.rnp.futebol.vocoliseu.pojo.unused.Script;
 import br.rnp.futebol.vocoliseu.pojo.Metric;
 import br.rnp.futebol.vocoliseu.util.adapter.MetricAdapter;
 import com.google.android.exoplayer2.demo.R;
