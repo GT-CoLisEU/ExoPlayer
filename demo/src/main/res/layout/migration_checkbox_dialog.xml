@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <CheckBox
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Migration per tier"
+        android:id="@+id/cb_mig_per_tier"
+        android:layout_alignParentTop="true"
+        android:ems="12"
+        android:gravity="center"
+        android:layout_marginTop="10dp"
+        android:layout_centerHorizontal="true"/>
+
+    <CheckBox
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Migrate during exhibition"
+        android:id="@+id/cb_migration_down"
+        android:ems="12"
+        android:gravity="center"
+        android:layout_marginTop="10dp"
+        android:layout_below="@+id/cb_mig_per_tier"
+        android:layout_centerHorizontal="true"/>
+
+    <CheckBox
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Upstream migration\n(Default = downstream)"
+        android:id="@+id/cb_migration_up"
+        android:ems="12"
+        android:gravity="center"
+        android:layout_marginTop="10dp"
+        android:layout_below="@+id/cb_migration_down"
+        android:layout_centerHorizontal="true"/>
+
+
+
+</RelativeLayout>

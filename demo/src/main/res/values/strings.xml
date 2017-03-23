@@ -16,7 +16,7 @@
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
 
     <!-- The user visible name of the application. [CHAR LIMIT=20] -->
-    <string name="application_name">VO-CoLisEU</string>
+    <string name="application_name">VERONA</string>
 
     <string name="video">Video</string>
 
@@ -60,7 +60,7 @@
 
 
     <!--
-    [UFRGS] VO-CoLisEU colors and strings
+    [UFRGS] VERONA colors and strings
     -->
 
     <!--colors-->
@@ -103,12 +103,16 @@
     <string name="exp_name_title">Experiment name</string>
     <string name="my_exps">My Experiments</string>
     <string name="my_videos">My videos</string>
-    <string name="file_name_title">File name</string>
+    <string name="file_name_title">Name of file to save results</string>
     <string name="provider_title">Provider address</string>
     <string name="ask_info">Ask for user personal information</string>
+    <string name="ask_age">Ask for age?</string>
+    <string name="ask_gender">Ask for gender?</string>
+    <string name="ask_cons">Ask for consumption level?</string>
+    <string name="ask_fam">Ask for familiarity level?</string>
     <string name="ask_info_description">If checked, the script will ask some volunteer information, such as age, gender and levels of video streaming consumption and mobile streaming knowledge</string>
     <string name="instructions_desc">Write here a description about your experiment</string>
-    <string name="instructions_example">Describe your script</string>
+    <string name="instructions_example">\t\t\t\t\t\t\tDescribe your script</string>
     <string name="address_example">143.54.12.21:8081/manifest</string>
     <string name="file_example">myfile (no extension)</string>
 
@@ -135,9 +139,9 @@
     <string name="close">Close</string>
     <string name="no_video_found">No video was found to add to this experiment.\nCreate a new video through the navigation tab!\nYou will be able to add it to any experiment.</string>
 
-    <string name="inst_1">With <b>VO-CoLisEU</b>, you\'re able to create any type of video experiment.\n\nTo start, go in the side menu and select <b>\'New Video\'</b> to register a new video.\n\nYou will be able to use this videos for one or more experiments.\n\nFor each video, you can select different <b>subjective QoE metrics</b>.\n\nAlso, you can use videos from different providers and it\'s all saved in your device!</string>
+    <string name="inst_1">With <b>VERONA</b>, you\'re able to create any type of video experiment.\n\nTo start, go in the side menu and select <b>\'New Video\'</b> to register a new video.\n\nYou will be able to use this videos for one or more experiments.\n\nFor each video, you can select different <b>subjective QoE metrics</b>.\n\nAlso, you can use videos from different providers and it\'s all saved in your device!</string>
     <string name="inst_2">After registering your videos, you\'re able to <b>create your experiments</b>, with one more of the previously created videos.\n\nTo create an experiment, you have to provide some information, such as the <b>experiment name</b>, the <b>name of the file</b> where it will be saved and some <b>instructions</b> .\n\nAll the video information will be saved in the <b>file with the provided name</b>. In this way, you\'re able to share an experiment to other device!\n\nFor each experiment, you can select QoS and objective QoE metrics.</string>
-    <string name="inst_3">After each video exhibition, a new line is added to a log file <b>containing the results</b>.\n\nThe saved metrics are the ones selected during the video and the experiment creation. The file with the results will also be the one provided when you created your experiment.\n\nIf you want to see this tutorial again, just go to <b>\'Tutorial\'</b> in the side menu.\n\nThat\'s it, thanks for using <b>VO-CoLisEU</b>!</string>
+    <string name="inst_3">After each video exhibition, a new line is added to a log file <b>containing the results</b>.\n\nThe saved metrics are the ones selected during the video and the experiment creation. The file with the results will also be the one provided when you created your experiment.\n\nIf you want to see this tutorial again, just go to <b>\'Tutorial\'</b> in the side menu.\n\nThat\'s it, thanks for using <b>VERONA</b>!</string>
 
     <string name="new_experiment">New Experiment</string>
     <string name="import_experiment">Import Experiment</string>
@@ -152,9 +156,10 @@
     <string name="familiar_aux">1 is unfarmilar and 5 is very familiar</string>
     <string name="consumption">What is your video streaming consumption level?</string>
     <string name="consumption_aux">1 is \'I don\'t use video streaming services\' and 5 is \'I use it everyday\'</string>
-    <string name="no_exps"><b>Welcome to VO-CoLiseU!</b>\nTo start, use the menu in the left to register your videos and create your experiments!</string>
+    <string name="no_exps"><b>Welcome to VERONA!</b>\nTo start, use the menu in the left to register your videos and create your experiments!</string>
 
     <string name="go_ahead">Start exhibition</string>
     <string name="skip">I don\'t want to answer</string>
+    <string name="select_metrics">Select the metrics for this video</string>
 
 </resources>

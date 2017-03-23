@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?><!-- Copyright (C) 2016 The Android Open Source Project
+
+     Licensed under the Apache License, Version 2.0 (the "License");
+     you may not use this file except in compliance with the License.
+     You may obtain a copy of the License at
+
+          http://www.apache.org/licenses/LICENSE-2.0
+
+     Unless required by applicable law or agreed to in writing, software
+     distributed under the License is distributed on an "AS IS" BASIS,
+     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+     See the License for the specific language governing permissions and
+     limitations under the License.
+-->
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/tb_cc_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:background="?attr/colorPrimary"
+        android:elevation="6dp"
+        android:minHeight="?attr/actionBarSize"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar" />
+
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="START"
+        android:gravity="center"
+        android:ems="15"
+        android:background="@drawable/bt_dark_style"
+        android:id="@+id/bt_merge_test"
+        android:textColor="@color/wht"
+        android:layout_marginTop="30dp"
+        android:layout_below="@+id/et_cc_chunk"
+        android:layout_centerHorizontal="true" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/et_cc_name"
+        android:gravity="center"
+        android:layout_marginTop="30dp"
+        android:ems="12"
+        android:hint="Video name"
+        android:layout_below="@+id/tb_cc_title"
+        android:layout_centerHorizontal="true" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/et_cc_provider"
+        android:hint="Provider"
+        android:layout_below="@+id/et_cc_name"
+        android:gravity="center"
+        android:ems="12"
+        android:layout_centerHorizontal="true" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:inputType="textPersonName"
+        android:hint="Extension"
+        android:gravity="center"
+        android:layout_below="@+id/et_cc_provider"
+        android:ems="12"
+        android:id="@+id/et_cc_ext"
+        android:layout_centerHorizontal="true" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/et_cc_parts"
+        android:layout_below="@+id/et_cc_ext"
+        android:gravity="center"
+        android:ems="12"
+        android:inputType="number"
+        android:hint="Number of Parts"
+        android:layout_centerHorizontal="true" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/et_cc_chunk"
+        android:layout_below="@+id/et_cc_parts"
+        android:gravity="center"
+        android:ems="12"
+        android:inputType="number"
+        android:hint="Chunk Duration"
+        android:layout_centerHorizontal="true" />
+</RelativeLayout>

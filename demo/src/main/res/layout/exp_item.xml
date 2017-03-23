@@ -52,7 +52,7 @@
         android:layout_height="40dp"
         android:contentDescription="@string/script"
         android:layout_marginStart="6dp"
-        android:src="@drawable/vo_icon"
+        android:src="@drawable/blue_verona"
         android:id="@+id/img_static_icon"
         android:layout_alignTop="@+id/tv_exp_item_name"
         android:layout_alignParentStart="true"

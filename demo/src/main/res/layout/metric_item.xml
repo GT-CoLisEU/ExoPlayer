@@ -27,8 +27,8 @@
         android:layout_alignParentTop="true"
         android:layout_alignParentStart="true"
         android:layout_marginTop="10dp"
-        android:textStyle="bold"
-        android:layout_marginStart="20dp" />
+        android:layout_marginEnd="10dp"
+        android:layout_marginStart="40dp" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -37,7 +37,8 @@
         android:id="@+id/tv_metric_item_type"
         android:layout_below="@+id/tv_metric_item_name"
         android:layout_marginBottom="10dp"
-        android:layout_alignStart="@+id/tv_metric_item_name" />
+        android:layout_marginEnd="10dp"
+        android:layout_alignStart="@+id/tv_metric_item_name"/>
 
     <CheckBox
         android:layout_width="wrap_content"
@@ -45,8 +46,8 @@
         android:clickable="false"
         android:focusable="false"
         android:id="@+id/cb_metric_item_used"
-        android:layout_alignBottom="@+id/tv_metric_item_type"
-        android:layout_alignParentEnd="true"
-        android:layout_marginEnd="20dp" />
+        android:layout_alignTop="@+id/tv_metric_item_name"
+        android:layout_alignParentStart="true"
+        android:layout_marginStart="10dp" />
 
 </RelativeLayout>

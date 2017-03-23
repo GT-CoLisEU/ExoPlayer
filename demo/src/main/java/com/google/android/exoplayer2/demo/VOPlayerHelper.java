@@ -1,7 +1,6 @@
 package com.google.android.exoplayer2.demo;
 
 import android.app.AlertDialog;
-import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -32,17 +31,18 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Collection;
-import java.util.Collections;
 import java.util.Date;
 import java.util.Locale;
 
-import br.rnp.futebol.vocoliseu.pojo.BinaryQuestion;
-import br.rnp.futebol.vocoliseu.pojo.Metric;
-import br.rnp.futebol.vocoliseu.pojo.TExperiment;
-import br.rnp.futebol.vocoliseu.pojo.TScript;
-import br.rnp.futebol.vocoliseu.util.ReadyMetrics;
-import br.rnp.futebol.vocoliseu.visual.activity.MainActivity;
+import br.rnp.futebol.verona.OWAMP.OWAMP;
+import br.rnp.futebol.verona.OWAMP.OWAMPArguments;
+import br.rnp.futebol.verona.OWAMP.OWAMPResult;
+import br.rnp.futebol.verona.pojo.BinaryQuestion;
+import br.rnp.futebol.verona.pojo.Metric;
+import br.rnp.futebol.verona.pojo.TExperiment;
+import br.rnp.futebol.verona.pojo.TScript;
+import br.rnp.futebol.verona.util.ReadyMetrics;
+import br.rnp.futebol.verona.visual.activity.MainActivity;
 
 
 /**
@@ -51,13 +51,13 @@ import br.rnp.futebol.vocoliseu.visual.activity.MainActivity;
  */
 public final class VOPlayerHelper implements Runnable, ExoPlayer.EventListener {
 
-    private boolean first = true, written = false, showedQuestion = false;
+    private boolean first = true, showedQuestion = false;
     private final String[] PARAMETERS = {"loop", "index", "experiment", "userInfo"};
     private boolean openedBq, openedACR, openedDCR, finished;
     private int bitrateAux = 0, bseCont = 0, index, loop;
     private static final int REFRESH_INTERVAL_MS = 1000;
     private long playbackStartTime, bufferingStartAux;
-    private boolean readyBq, readyACR, readyDCR;
+    private boolean readyBq, readyACR, readyDCR, mig3to2, mig2to1;
     private double value1 = -1, value2 = -1;
     private final SimpleExoPlayer player;
     private boolean started, isPstFilled;
@@ -66,9 +66,11 @@ public final class VOPlayerHelper implements Runnable, ExoPlayer.EventListener {
     private Runnable mStatusChecker;
     private TExperiment experiment;
     private Handler mHandler;
-    private int mCount = 0;
+    private int mCount = 0, stallAux;
     private Context ctx;
-    private int choose;
+    private boolean bugged;
+    private int choose, rttCont = 0, received = 0, sent = 0, isFrozen = 0;
+    private float rttTotal = 0;
 
     /**
      * @param player   The {@link SimpleExoPlayer} from which debug information should be obtained.
@@ -92,7 +94,7 @@ public final class VOPlayerHelper implements Runnable, ExoPlayer.EventListener {
         if (started) {
             return;
         }
-        written = false;
+//        written = false;
         started = true;
         player.addListener(this);
         updateAndPost();
@@ -122,17 +124,24 @@ public final class VOPlayerHelper implements Runnable, ExoPlayer.EventListener {
     public void onPlayerStateChanged(boolean playWhenReady, int playbackState) {
         if (playbackState == ExoPlayer.STATE_BUFFERING && playWhenReady) {
             bufferingStartAux = Calendar.getInstance().getTimeInMillis();
-            if (isPstFilled)
+//            stallAux = player.getStalls();
+            if (isPstFilled) {
+                isFrozen = 1;
                 player.increaseStalls();
-        } else if (playbackState == ExoPlayer.STATE_READY) {
+            }
+        } else if (playbackState == ExoPlayer.STATE_READY && playWhenReady) {
             long bufferingEndAux = Calendar.getInstance().getTimeInMillis();
-            if (isPstFilled)
-                player.setStallsDuration(bufferingEndAux - bufferingStartAux);
-            else {
+            if (isPstFilled) {
+                if (stallAux != playbackState) {
+                    isFrozen = 0;
+                    player.setStallsDuration(bufferingEndAux - bufferingStartAux);
+                }
+            } else {
                 playbackStartTime = bufferingEndAux - bufferingStartAux;
                 isPstFilled = true;
             }
         }
+        stallAux = playbackState;
         updateAndPost();
     }
 
@@ -158,17 +167,69 @@ public final class VOPlayerHelper implements Runnable, ExoPlayer.EventListener {
         updateAndPost();
     }
 
-
     // Private methods.
 
     private void updateAndPost() {
+//        setProvNum();
+        final TScript script = experiment.getScripts().get(index);
+//        AsyncTask.execute(new Runnable() {
+//            @Override
+//            public void run() {
+        if (player.getCurrentPosition() > 10000 && !mig3to2) {
+//            migrate(3, 2, true);
+            mig3to2 = true;
+        } else if (player.getCurrentPosition() > 100000 && !mig2to1) {
+//            migrate(2, 1, true);
+            mig2to1 = true;
+        }
+
+        if (player.getCurrentPosition() > (player.getDuration() - 1500))
+            bugged = true;
+//            }
+//        });
+
 //    textView.setText(getPlayerStateString() + getPlayerWindowIndexString() + getVideoString() + getAudioString());
 //    textView.setText(getPlayerStateString() + "Buffer Percentage: " + player.getBufferedPercentage() + "%\n" +
 //                     "Buffer Position: " + player.getBufferedPosition() + "\n");
 //        Log.i("PLAYBACKSTATE", player.getPlaybackState() + "");
 //        Toast.makeText(ctx, "" + player.getPlaybackState(), Toast.LENGTH_SHORT).show();
-        if (!(player.getPlaybackState() == ExoPlayer.STATE_ENDED)) {
-//            textView.setText(getLogString());
+        if (!(player.getPlaybackState() == ExoPlayer.STATE_ENDED) && !bugged) {
+            textView.setText(getLogString());
+//            if (experiment.getQosMetrics().contains(1) || experiment.getQosMetrics().contains(2)) {
+            String provAux = script.getAddress();
+            OWAMPResult rtt = null;
+            if (provAux != null) {
+                rtt = measureRTT(provAux);
+                if (rtt == null) {
+                    provAux = provAux.substring(provAux.indexOf("//") + 2, provAux.length());
+                    rtt = measureRTT(provAux);
+                    if (rtt == null) {
+                        if (provAux.contains("/"))
+                            provAux = provAux.substring(0, provAux.indexOf("/"));
+                        if (provAux.contains(":"))
+                            provAux = provAux.substring(0, provAux.indexOf(":"));
+                        rtt = measureRTT(provAux);
+                    }
+                }
+            }
+            String bsbCsv = Environment.getExternalStorageDirectory().getAbsolutePath() + "/".concat(experiment.getFilename().concat("_sbs.csv"));
+            File header = new File(bsbCsv);
+            if (!header.exists())
+                writePerSecond(getHeaderBsb());
+            Format format = player.getVideoFormat();
+            if (rtt != null) {
+                rttTotal += rtt.getRtt_avg();
+                rttCont++;
+                received += rtt.getReceived();
+                sent += rtt.getTransmitted();
+                if (format != null)
+                    writePerSecond(loop + "," + player.getCurrentPosition() / 1000 + "," + rtt.getRtt_avg() + "," + (100 - (100 * rtt.getReceived() / rtt.getTransmitted())) + "," + isFrozen + "," + format.bitrate + "," + format.width + "x" + format.height);
+            } else {
+                if (format != null)
+                    writePerSecond(loop + "," + player.getCurrentPosition() / 1000 + ",,," + isFrozen + "," + format.bitrate + "," + format.width + "x" + format.height);
+            }
+
+//            }
             textView.removeCallbacks(this);
             textView.postDelayed(this, REFRESH_INTERVAL_MS);
         } else {
@@ -179,9 +240,8 @@ public final class VOPlayerHelper implements Runnable, ExoPlayer.EventListener {
 //            DialogInterface.OnClickListener listener;
             File header = new File(csv);
             if (!header.exists())
-                write(getHeader(), false);
+                write(getHeader());
             if (!showedQuestion) {
-                final TScript script = experiment.getScripts().get(index);
                 ArrayList<Metric> metricsAux = checkMetrics(script.getSubjectiveQoeMetrics());
                 if (metricsAux != null) {
                     final ArrayList<Metric> metrics = orderMetrics(metricsAux);
@@ -216,7 +276,7 @@ public final class VOPlayerHelper implements Runnable, ExoPlayer.EventListener {
                                     finished = true;
                                     stopRepeatingTask();
                                     write(buildCsvText().concat(dot()).concat(star(value1)).concat(dot()).concat(star(value2))
-                                            .concat(dot()).concat(questionToCsv(script.getQuestion(), choose)), true);
+                                            .concat(dot()).concat(questionToCsv(script.getQuestion(), choose)));
                                     nextLoop(script);
                                 }
                             }
@@ -224,10 +284,37 @@ public final class VOPlayerHelper implements Runnable, ExoPlayer.EventListener {
                     };
                     mHandler = new Handler();
                     startRepeatingTask();
+                } else {
+                    showedQuestion = true;
+                    write(buildCsvText().concat(appendDot(3)));
+                    nextLoop(script);
                 }
             }
 
         }
+    }
+
+    public void deleteCache(Context context) {
+        try {
+            File dir = context.getCacheDir();
+            if (dir != null && dir.isDirectory()) {
+                deleteDir(dir);
+            }
+        } catch (Exception e) {
+            Log.i("error", e.getMessage());
+        }
+    }
+
+    public boolean deleteDir(File dir) {
+        if (dir != null && dir.isDirectory()) {
+            String[] children = dir.list();
+            for (String s : children) {
+                boolean success = deleteDir(new File(dir, s));
+                if (!success)
+                    return false;
+            }
+        }
+        return dir != null && dir.delete();
     }
 
     private boolean allReady() {
@@ -298,14 +385,28 @@ public final class VOPlayerHelper implements Runnable, ExoPlayer.EventListener {
         return "Evaluation " + i + " of " + t;
     }
 
+    @SuppressWarnings("unused")
     private boolean isACR(int mId) {
         return (mId == ReadyMetrics.ACR_ID);
     }
 
     private void nextLoop(TScript script) {
+//        ((PlayerActivityWithMigration) ctx).releasePlayer();
+//        AsyncTask.execute(new Runnable() {
+//            @Override
+//            public void run() {
+//        migrate(1, 3, false);
+//            }
+//        });
+//        mig2to1 = true;
+//        mig3to2 = true;
         if (script.getLoop() - loop > 0) {
             loop++;
         } else if (experiment.getScripts().size() > index + 1) {
+//            if (index == 0)
+//                migrate(3, 2, true);
+//            else if (index == 1)
+//                migrate(2, 1, true);
             index++;
             loop = 1;
         } else {
@@ -314,8 +415,9 @@ public final class VOPlayerHelper implements Runnable, ExoPlayer.EventListener {
         }
         Toast.makeText(ctx, "Starting next video", Toast.LENGTH_SHORT).show();
         try {
-            wait(2000L);
+            deleteCache(ctx);
         } catch (Exception e) {
+            Log.i("error", e.getMessage());
         }
 //        mHandler.postDelayed(mStatusChecker, 500);
         Bundle extras = new Bundle();
@@ -326,8 +428,8 @@ public final class VOPlayerHelper implements Runnable, ExoPlayer.EventListener {
 
         Intent intent = new Intent(ctx, PlayerActivity.class);
         intent.putExtras(extras);
-
-        intent.setData(Uri.parse(script.getProvider()));
+        String provider = experiment.getScripts().get(index).getProvider();
+        intent.setData(Uri.parse(provider));
         intent.setAction(PlayerActivity.ACTION_VIEW);
 
         ctx.startActivity(intent);
@@ -353,7 +455,7 @@ public final class VOPlayerHelper implements Runnable, ExoPlayer.EventListener {
         ArrayList<Integer> metrics = experiment.getObjectiveQoeMetrics();
         Format format = player.getVideoFormat();
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy-HH:mm:ss", Locale.US);
-        String txt = sdf.format(new Date());
+        String txt = loop + "," + sdf.format(new Date());
         if (metrics.contains(6))
             txt += "," + player.getStalls();
         if (metrics.contains(7))
@@ -364,35 +466,50 @@ public final class VOPlayerHelper implements Runnable, ExoPlayer.EventListener {
             txt += "," + initialRes + "," + format.width + "x" + format.height;
         if (metrics.contains(10))
             txt += "," + initialBR + "," + format.bitrate;
-        if (userInfo != null) {
+        metrics = experiment.getQosMetrics();
+        if (metrics.contains(1))
+            txt += "," + (rttTotal / rttCont);
+        if (metrics.contains(2))
+            if (sent != 0)
+                txt += "," + (100 - ((received * 100) / sent)) + "%";
+            else
+                txt += ",";
+        if (userInfo != null)
             try {
                 JSONObject json = new JSONObject(userInfo);
-                txt += "," + json.getString("age") + "," + json.getString("gender")
-                        + "," + json.getString("consumption") + "," + json.getString("familiar");
+                if (json.has("age"))
+                    txt += "," + json.getString("age");
+                else
+                    txt += ",";
+                if (json.has("gender"))
+                    txt += "," + json.getString("gender");
+                else
+                    txt += ",";
+                if (json.has("consumption"))
+                    txt += "," + json.getString("consumption");
+                else
+                    txt += ",";
+                if (json.has("familiar"))
+                    txt += "," + json.getString("familiar");
+                else
+                    txt += ",";
             } catch (Exception e) {
-                txt += ",,,,";
+                Log.i("error", "Error reading personal info");
             }
-        } else {
-            txt += ",,,,";
-        }
         txt += "";
         return txt;
     }
 
     private String getLogString() {
-        StringBuilder builder = new StringBuilder();
-        builder.append(getStatusString());
-//    builder.append(getPlayerWindowIndexString());
-        builder.append(getPlayerStateString());
-        builder.append(getBufferProgress());
-        builder.append(getVideoString());
-        builder.append(getAudioString());
-//    builder.append(getDecoderCountersBufferCountString("Video", player.getVideoDecoderCounters()));
-//    builder.append(getDecoderCountersBufferCountString("Audio", player.getAudioDecoderCounters()));
-        builder.append(getStallsString());
-        builder.append("\nLoop: " + loop);
-        builder.append("\nIndex: " + index);
-        return builder.toString();
+        String txt = "";
+        txt += getStatusString();
+        txt += getPlayerStateString();
+        txt += getBufferProgress();
+        txt += getVideoString();
+        txt += getAudioString();
+        txt += getStallsString();
+        txt += "\nLoop: " + loop + "/" + experiment.getScripts().get(index).getLoop();
+        return txt;
     }
 
     private String getPlayerStateString() {
@@ -419,7 +536,7 @@ public final class VOPlayerHelper implements Runnable, ExoPlayer.EventListener {
 
     private String getHeader() {
         ArrayList<Integer> metrics = experiment.getObjectiveQoeMetrics();
-        String txt = "Timestamp";
+        String txt = "Repetition,Timestamp";
         if (metrics.contains(6))
             txt += ",Freezes";
         if (metrics.contains(7))
@@ -430,8 +547,19 @@ public final class VOPlayerHelper implements Runnable, ExoPlayer.EventListener {
             txt += ",Initial Res,Final Res";
         if (metrics.contains(10))
             txt += ",Initial Bitrate,Final Bitrate";
-        txt += ",Age,Gender,Consumption Level,Familiarity,ACR,DCR,Binary Question,Answer";
+        metrics = experiment.getQosMetrics();
+        if (metrics.contains(1))
+            txt += ",Average RTT";
+        if (metrics.contains(2))
+            txt += ",Packet Loss";
+        if (userInfo != null)
+            txt += ",Age,Gender,Consumption Level,Familiarity";
+        txt += ",ACR,DCR,Binary Question,Answer";
         return txt;
+    }
+
+    private String getHeaderBsb() {
+        return "Repetition,Position,RTT,Packet Loss,is Frozen,Bitrate,Resolution";
     }
 
     public AlertDialog makeCompleteDialog(String title, String message, String okt, String cancelt, Context ctx,
@@ -445,6 +573,11 @@ public final class VOPlayerHelper implements Runnable, ExoPlayer.EventListener {
         AlertDialog dialog = builder.create();
         dialog.show();
         return dialog;
+    }
+
+    private OWAMPResult measureRTT(String ip) {
+        OWAMPArguments args = new OWAMPArguments.Builder().url(ip).timeout(5).count(1).bytes(32).build();
+        return OWAMP.ping(args, OWAMP.Backend.UNIX);
     }
 
     public AlertDialog makeAcrDcrDialog(String title, final boolean isAcr) {
@@ -480,6 +613,7 @@ public final class VOPlayerHelper implements Runnable, ExoPlayer.EventListener {
         return makeCompleteDialog(title, bq.getQuestion(), bq.getAnswer1(), bq.getAnswer2(), ctx, ok, cancel);
     }
 
+    @SuppressWarnings("unused")
     public AlertDialog makeDialog(String title, String message, Context myContext, DialogInterface.OnClickListener listener) {
         AlertDialog.Builder builder = new AlertDialog.Builder(myContext);
         builder.setMessage(message);
@@ -516,6 +650,7 @@ public final class VOPlayerHelper implements Runnable, ExoPlayer.EventListener {
         return text;
     }
 
+    @SuppressWarnings("unused")
     private String getStatusString() {
         String status = ("Ready to Play: ");
         status += (player.getPlayWhenReady());
@@ -524,16 +659,31 @@ public final class VOPlayerHelper implements Runnable, ExoPlayer.EventListener {
         return status;
     }
 
-    private void write(String msg, boolean written) {
+    private void write(String msg) {
+//    }, boolean written) {
         try {
-            this.written = written;
+//            this.written = written;
             String csv = Environment.getExternalStorageDirectory().getAbsolutePath() + "/".concat(experiment.getFilename().concat(".csv"));
             BufferedWriter output = new BufferedWriter(new FileWriter(csv, true));
             output.append(msg);
             output.newLine();
             output.close();
         } catch (IOException e) {
-            Log.i("teste", e.getMessage());
+            Log.i("Error", e.getMessage());
+        }
+    }
+
+    private void writePerSecond(String msg) {
+//        , boolean written) {
+        try {
+//            this.writenBsb = written;
+            String csv = Environment.getExternalStorageDirectory().getAbsolutePath() + "/".concat(experiment.getFilename().concat("_sbs.csv"));
+            BufferedWriter output = new BufferedWriter(new FileWriter(csv, true));
+            output.append(msg);
+            output.newLine();
+            output.close();
+        } catch (IOException e) {
+            Log.i("Error", e.getMessage());
         }
     }
 
@@ -545,6 +695,7 @@ public final class VOPlayerHelper implements Runnable, ExoPlayer.EventListener {
         return text;
     }
 
+    @SuppressWarnings("unused")
     private String getPlayerWindowIndexString() {
         String index = ("\nPeriod Index: ");
         index += (player.getCurrentPeriodIndex());
@@ -598,6 +749,7 @@ public final class VOPlayerHelper implements Runnable, ExoPlayer.EventListener {
 //                + getDecoderCountersBufferCountString(player.getAudioDecoderCounters()) + ")";
     }
 
+    @SuppressWarnings("unused")
     private String getDecoderCountersBufferCountString(String type, DecoderCounters counters) {
         if (counters == null) {
             return "";

@@ -29,7 +29,7 @@
         android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
         app:popupTheme="@style/ThemeOverlay.AppCompat.Light"/>
 
-    <EditText
+    <AutoCompleteTextView
         android:id="@+id/et_provider_address_ac"
         android:layout_below="@id/tb_script_general_ac"
         android:layout_width="wrap_content"

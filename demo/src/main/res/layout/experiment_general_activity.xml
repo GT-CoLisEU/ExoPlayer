@@ -63,16 +63,46 @@
     <!--android:layout_below="@+id/et_file_name">-->
 
     <CheckBox
-        android:id="@+id/cb_ask_info_ac"
+        android:id="@+id/cb_ask_age_ac"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignEnd="@+id/et_file_name_ac"
         android:layout_alignStart="@+id/et_file_name_ac"
         android:layout_below="@+id/et_file_name_ac"
         android:checked="false"
-        android:gravity="center"
-        android:hint="@string/ask_info_description"
-        android:text="@string/ask_info" />
+        android:layout_marginTop="15dp"
+        android:layout_marginBottom="3dp"
+        android:text="@string/ask_age" />
+
+    <CheckBox
+        android:id="@+id/cb_ask_gender_ac"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:checked="false"
+        android:text="@string/ask_gender"
+        android:layout_below="@+id/cb_ask_age_ac"
+        android:layout_alignStart="@+id/cb_ask_age_ac" />
+
+    <CheckBox
+        android:id="@+id/cb_ask_cons_ac"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:checked="false"
+        android:text="@string/ask_cons"
+        android:layout_marginBottom="3dp"
+        android:layout_below="@+id/cb_ask_gender_ac"
+        android:layout_alignStart="@+id/cb_ask_age_ac"
+        android:layout_alignEnd="@+id/im_filename_help" />
+
+    <CheckBox
+        android:id="@+id/cb_ask_fam_ac"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:checked="false"
+        android:text="@string/ask_fam"
+        android:layout_below="@+id/cb_ask_cons_ac"
+        android:layout_alignStart="@+id/cb_ask_cons_ac"
+        android:layout_alignEnd="@+id/im_filename_help" />
 
     <!--<RelativeLayout-->
     <!--android:layout_width="match_parent"-->
@@ -85,11 +115,11 @@
         android:id="@+id/tv_how_to"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignEnd="@+id/cb_ask_info_ac"
-        android:layout_alignStart="@+id/cb_ask_info_ac"
-        android:layout_below="@+id/cb_ask_info_ac"
         android:gravity="center"
-        android:text="@string/instructions_desc" />
+        android:layout_marginTop="15dp"
+        android:text="@string/instructions_desc"
+        android:layout_below="@+id/cb_ask_fam_ac"
+        android:layout_alignStart="@+id/cb_ask_fam_ac" />
 
     <EditText
         android:id="@+id/et_instructions_ac"
@@ -97,10 +127,9 @@
         android:layout_height="wrap_content"
         android:layout_alignEnd="@+id/tv_how_to"
         android:layout_alignStart="@+id/tv_how_to"
-        android:layout_below="@+id/cb_ask_info_ac"
+        android:layout_below="@+id/tv_how_to"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="26dp"
-        android:gravity="center"
+        android:layout_marginTop="10dp"
         android:hint="@string/instructions_example" />
 
     <ImageButton
@@ -114,6 +143,22 @@
         android:background="@drawable/circle"
         android:contentDescription="@string/create_new_exp"
         android:src="@drawable/ic_arrow_right" />
+
+    <ImageView
+        android:layout_width="23dp"
+        android:layout_height="23dp"
+        android:id="@+id/im_filename_help"
+        android:src="@drawable/ic_info_aux"
+        android:layout_alignTop="@+id/et_file_name_ac"
+        android:layout_alignEnd="@+id/et_file_name_ac" />
+
+    <ImageView
+        android:layout_width="23dp"
+        android:layout_height="23dp"
+        android:id="@+id/im_info_help"
+        android:src="@drawable/ic_info_aux"
+        android:layout_alignTop="@+id/cb_ask_age_ac"
+        android:layout_alignEnd="@+id/cb_ask_age_ac" />
 
     <!--</RelativeLayout>-->
 

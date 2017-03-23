@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:background="@color/def"
+    android:layout_height="match_parent">
+
+
+    <ImageView
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+        android:id="@+id/img_start"
+        android:background="@drawable/white_verona"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@+id/tv_about_1" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/application_name"
+        android:textColor="@color/wht"
+        android:textStyle="bold"
+        android:textSize="24sp"
+        android:id="@+id/tv_about_1"
+        android:layout_marginTop="27dp"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Thanks for participating as a volunteer\nfor this experiment."
+        android:textColor="@color/wht"
+        android:id="@+id/tv_about_3"
+        android:gravity="center"
+        android:layout_marginTop="20dp"
+        android:layout_below="@+id/img_start"
+        android:layout_centerHorizontal="true" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/futebol"
+        android:gravity="center"
+        android:textColor="@color/wht"
+        android:layout_alignParentStart="true"
+        android:layout_marginStart="20dp"
+        android:layout_alignParentEnd="true"
+        android:layout_marginEnd="20dp"
+        android:id="@+id/tv_start_inst"
+        android:layout_marginTop="10dp"
+        android:layout_below="@+id/tv_about_3"
+        android:layout_centerHorizontal="true" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Start Video(s)"
+        android:id="@+id/bt_start_videos"
+        android:background="@drawable/bt_style"
+        android:textColor="@color/def"
+        android:textStyle="bold"
+        android:layout_alignStart="@+id/img_start"
+        android:layout_alignEnd="@+id/img_start"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="20dp" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Provide Information"
+        android:id="@+id/bt_provide_info"
+        android:background="@drawable/bt_style"
+        android:textColor="@color/def"
+        android:textStyle="bold"
+        android:layout_above="@+id/bt_start_videos"
+        android:layout_marginBottom="15dp"
+        android:layout_alignStart="@+id/bt_start_videos"
+        android:layout_alignEnd="@+id/bt_start_videos" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Could you provide us some information?\nIf you don't want to, just click in Start Video(s)"
+        android:gravity="center"
+        android:textColor="@color/wht"
+        android:id="@+id/tv_provide_info"
+        android:layout_marginBottom="10dp"
+        android:layout_above="@+id/bt_provide_info"
+        android:layout_centerHorizontal="true" />
+
+    <!--<RelativeLayout-->
+        <!--android:id="@+id/rel_border_left"-->
+        <!--android:layout_width="50dp"-->
+        <!--android:layout_height="match_parent"-->
+        <!--android:layout_alignParentStart="true"/>-->
+<!---->
+    <!--<RelativeLayout-->
+        <!--android:layout_width="50dp"-->
+        <!--android:id="@+id/rel_border_right"-->
+        <!--android:layout_height="match_parent"-->
+        <!--android:layout_alignParentEnd="true"/>-->
+
+</RelativeLayout>

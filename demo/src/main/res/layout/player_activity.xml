@@ -12,7 +12,7 @@
      See the License for the specific language governing permissions and
      limitations under the License.
 -->
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/root"
     android:background="@color/black"
@@ -27,11 +27,11 @@
         android:layout_height="match_parent"
         android:focusable="true" />
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/wht"
-        android:orientation="vertical">
+        android:layout_alignParentTop="true"
+        android:background="@color/wht">
 
         <TextView
             android:id="@+id/debug_text_view"
@@ -43,20 +43,6 @@
             android:textSize="10sp"
             tools:ignore="SmallSp" />
 
-        <!--<LinearLayout android:id="@+id/controls_root"-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:orientation="horizontal"-->
-        <!--android:visibility="gone">-->
-        <!---->
-        <!--<Button android:id="@+id/retry_button"-->
-        <!--android:layout_width="wrap_content"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:text="@string/retry"-->
-        <!--android:visibility="gone"/>-->
-        <!---->
-        <!--</LinearLayout>-->
+    </RelativeLayout>
 
-    </LinearLayout>
-
-</FrameLayout>
+</RelativeLayout>

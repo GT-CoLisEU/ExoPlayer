@@ -21,7 +21,9 @@ import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.annotation.NonNull;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -73,7 +75,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
-import br.rnp.futebol.vocoliseu.pojo.TExperiment;
+import br.rnp.futebol.verona.pojo.TExperiment;
 
 /**
  * An activity that plays media using {@link SimpleExoPlayer}.
@@ -113,7 +115,7 @@ public class PlayerActivity extends Activity implements OnClickListener, ExoPlay
     private DataSource.Factory mediaDataSourceFactory;
     private SimpleExoPlayer player;
     private MappingTrackSelector trackSelector;
-    private TrackSelectionHelper trackSelectionHelper;
+    //    private TrackSelectionHelper trackSelectionHelper;
     private VOPlayerHelper debugViewHelper;
     private boolean playerNeedsSource;
 
@@ -127,6 +129,10 @@ public class PlayerActivity extends Activity implements OnClickListener, ExoPlay
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Log.i("passed", "PASSOUNOONCREATE");
+        Log.i("BNDWTH1", BANDWIDTH_METER.toLog());
+        BANDWIDTH_METER.setBitrateEstimate(-1);
+        Log.i("BNDWTH11", BANDWIDTH_METER.toLog());
         shouldAutoPlay = true;
         userAgent = Util.getUserAgent(this, "ExoPlayerDemo");
         mediaDataSourceFactory = buildDataSourceFactory(true);
@@ -150,6 +156,7 @@ public class PlayerActivity extends Activity implements OnClickListener, ExoPlay
 
     @Override
     public void onNewIntent(Intent intent) {
+        Log.i("passed", "PASSOUNOONNEWINTENT");
         releasePlayer();
         shouldRestorePosition = false;
         setIntent(intent);
@@ -157,6 +164,7 @@ public class PlayerActivity extends Activity implements OnClickListener, ExoPlay
 
     @Override
     public void onStart() {
+        Log.i("passed", "PASSOUNOONSTART");
         super.onStart();
         if (Util.SDK_INT > 23) {
             initializePlayer();
@@ -165,6 +173,8 @@ public class PlayerActivity extends Activity implements OnClickListener, ExoPlay
 
     @Override
     public void onResume() {
+        Log.i("passed", "PASSOUNOONRESUME");
+        BANDWIDTH_METER.setBitrateEstimate(-1);
         super.onResume();
         if ((Util.SDK_INT <= 23 || player == null)) {
             initializePlayer();
@@ -188,8 +198,8 @@ public class PlayerActivity extends Activity implements OnClickListener, ExoPlay
     }
 
     @Override
-    public void onRequestPermissionsResult(int requestCode, String[] permissions,
-                                           int[] grantResults) {
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
+                                           @NonNull int[] grantResults) {
         if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
             initializePlayer();
         } else {
@@ -262,12 +272,15 @@ public class PlayerActivity extends Activity implements OnClickListener, ExoPlay
                 }
 
                 eventLogger = new EventLogger();
+                Log.i("BNDWTH2", BANDWIDTH_METER.toLog());
                 TrackSelection.Factory videoTrackSelectionFactory =
                         new AdaptiveVideoTrackSelection.Factory(BANDWIDTH_METER);
                 trackSelector = new DefaultTrackSelector(mainHandler, videoTrackSelectionFactory);
                 trackSelector.addListener(this);
                 trackSelector.addListener(eventLogger);
-                trackSelectionHelper = new TrackSelectionHelper(trackSelector, videoTrackSelectionFactory);
+                if (simpleExoPlayerView.getPlaybackController() != null)
+                    simpleExoPlayerView.getPlaybackController().useCC(false);
+//                trackSelectionHelper = new TrackSelectionHelper(trackSelector, videoTrackSelectionFactory);
                 player = ExoPlayerFactory.newSimpleInstance(this, trackSelector, new DefaultLoadControl(),
                         drmSessionManager, preferExtensionDecoders);
                 player.addListener(this);
@@ -362,7 +375,7 @@ public class PlayerActivity extends Activity implements OnClickListener, ExoPlay
                 FrameworkMediaDrm.newInstance(uuid), drmCallback, null, mainHandler, eventLogger);
     }
 
-    private void releasePlayer() {
+    public void releasePlayer() {
         if (player != null) {
             debugViewHelper.stop();
             debugViewHelper = null;
@@ -380,7 +393,7 @@ public class PlayerActivity extends Activity implements OnClickListener, ExoPlay
             player.release();
             player = null;
             trackSelector = null;
-            trackSelectionHelper = null;
+//            trackSelectionHelper = null;
             eventLogger = null;
         }
     }
@@ -393,6 +406,7 @@ public class PlayerActivity extends Activity implements OnClickListener, ExoPlay
      * @return A new DataSource factory.
      */
     private DataSource.Factory buildDataSourceFactory(boolean useBandwidthMeter) {
+        Log.i("BNDWTH3", BANDWIDTH_METER.toLog() + " " + useBandwidthMeter);
         return new DefaultDataSourceFactory(this, useBandwidthMeter ? BANDWIDTH_METER : null,
                 buildHttpDataSourceFactory(useBandwidthMeter));
     }
@@ -405,6 +419,7 @@ public class PlayerActivity extends Activity implements OnClickListener, ExoPlay
      * @return A new HttpDataSource factory.
      */
     private HttpDataSource.Factory buildHttpDataSourceFactory(boolean useBandwidthMeter) {
+        Log.i("BNDWTH3", BANDWIDTH_METER.toLog() + " " + useBandwidthMeter);
         return new DefaultHttpDataSourceFactory(userAgent, useBandwidthMeter ? BANDWIDTH_METER : null);
     }
 

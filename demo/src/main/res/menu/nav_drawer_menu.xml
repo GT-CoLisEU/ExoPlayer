@@ -2,6 +2,14 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="nkdroid.tutorial.navigationview.MainActivity">
 
+    <group android:id="@+id/grp_video"
+        android:checkableBehavior="single">
+        <item
+            android:id="@+id/navigation_item_video"
+            android:icon="@drawable/ic_temp_icon_white"
+            android:title="@string/new_video" />
+    </group>
+
     <group android:id="@+id/grp_exp"
         android:checkableBehavior="single">
         <item
@@ -18,12 +26,16 @@
             android:title="@string/export_experiment" />
     </group>
 
-    <group android:id="@+id/grp_video"
+    <group android:id="@+id/grp_results"
         android:checkableBehavior="single">
         <item
-            android:id="@+id/navigation_item_video"
-            android:icon="@drawable/ic_temp_icon_white"
-            android:title="@string/new_video" />
+            android:id="@+id/navigation_item_export_results"
+            android:icon="@drawable/ic_arrow_right"
+            android:title="Export results" />
+        <item
+            android:id="@+id/navigation_item_open_results"
+            android:icon="@drawable/ic_clean"
+            android:title="Clean results" />
     </group>
 
     <group android:id="@+id/grp_others"
@@ -35,6 +47,8 @@
         <item
             android:id="@+id/navigation_item_about"
             android:icon="@drawable/ic_about"
-            android:title="@string/about" />
+            android:title="CC Experiment" />
     </group>
+
+
 </menu>

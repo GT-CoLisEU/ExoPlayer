@@ -18,7 +18,7 @@
     <style name="VOCoLisEU" parent="Theme.AppCompat.Light.NoActionBar">
         <item name="colorPrimary">#3F51B5</item>
         <item name="colorPrimaryDark">#303F9F</item>
-        <item name="colorAccent">#3333FF</item>
+        <item name="colorAccent">#6495ED</item>
         <item name="android:label">@string/application_name</item>
         <item name="android:windowNoTitle">true</item>
         <!--<item name="android:icon">@drawable/ic_launcher</item>-->

@@ -13,8 +13,8 @@
      limitations under the License.
 -->
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
     android:layout_height="match_parent">
 
     <android.support.v7.widget.Toolbar
@@ -26,28 +26,46 @@
         android:elevation="6dp"
         android:minHeight="?attr/actionBarSize"
         android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
-        app:popupTheme="@style/ThemeOverlay.AppCompat.Light"/>
+        app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
 
     <ListView
         android:id="@+id/lv_exp_metrics_ac"
-        android:layout_below="@id/tb_exp_metrics_ac"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:focusable="false"
-        android:layout_marginLeft="5dp"
-        android:layout_marginRight="5dp" />
+        android:layout_below="@id/tb_exp_metrics_ac"
+        android:layout_marginBottom="50dp"
+        android:focusable="false" />
 
     <ImageButton
+        android:id="@+id/ib_exp_pt3"
         android:layout_width="60dp"
         android:layout_height="60dp"
-        android:src="@drawable/ic_arrow_right"
-        android:id="@+id/ib_exp_pt3"
-        android:contentDescription="@string/create_new_exp"
         android:layout_alignParentBottom="true"
         android:layout_alignParentEnd="true"
-        android:layout_marginEnd="10dp"
         android:layout_marginBottom="10dp"
-        android:background="@drawable/circle" />
+        android:layout_marginEnd="10dp"
+        android:background="@drawable/circle"
+        android:contentDescription="@string/create_new_exp"
+        android:src="@drawable/ic_arrow_right" />
 
+    <CheckBox
+        android:id="@+id/cb_select_all_metrics"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginBottom="20dp"
+        android:layout_marginStart="10dp"
+        android:text="Select All" />
+
+    <TextView
+        android:id="@+id/tv_selected_metrics_qty"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/cb_select_all_metrics"
+        android:layout_alignBottom="@+id/cb_select_all_metrics"
+        android:layout_marginStart="14dp"
+        android:layout_toEndOf="@+id/cb_select_all_metrics"
+        android:text="" />
 
 </RelativeLayout>

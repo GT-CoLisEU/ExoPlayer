@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <SeekBar
+        android:id="@+id/sk_opinion"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="10dp"
+        android:max="4" />
+
+    <TextView
+        android:id="@+id/tv_opinion_status"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/sk_opinion"
+        android:layout_centerHorizontal="true"
+        android:text="Role" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toLeftOf="@+id/sk_opinion"
+        android:text="Never"
+        android:id="@+id/tv_v1"
+        android:layout_alignTop="@+id/sk_opinion" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@+id/sk_opinion"
+        android:text="Always"
+        android:id="@+id/tv_v5"
+        android:layout_alignTop="@+id/sk_opinion" />
+
+</RelativeLayout>
