@@ -345,7 +345,7 @@ public final class SimpleExoPlayer implements ExoPlayer {
     }
 
     /*
-  * [UFRGS] VO-CoLisEU
+  * [UFRGS] VERONA
   * Return the number of freezes/stalls during the exhibition
   */
     public int getStalls() {
@@ -353,7 +353,7 @@ public final class SimpleExoPlayer implements ExoPlayer {
     }
 
     /*
-     * [UFRGS] VO-CoLisEU
+     * [UFRGS] VERONA
      * Return the combined duration of freezes/stalls during the exhibition
      */
     public Long getStallsDuration() {
@@ -361,7 +361,7 @@ public final class SimpleExoPlayer implements ExoPlayer {
     }
 
     /*
-     * [UFRGS] VO-CoLisEU
+     * [UFRGS] VERONA
      * Return the number of freezes/stalls during the exhibition
      */
     public void setStalls(int cont) {
@@ -369,7 +369,7 @@ public final class SimpleExoPlayer implements ExoPlayer {
     }
 
     /*
-     * [UFRGS] VO-CoLisEU
+     * [UFRGS] VERONA
      * Return the combined duration of freezes/stalls during the exhibition
      */
     public void setStallsDuration(long durationms) {

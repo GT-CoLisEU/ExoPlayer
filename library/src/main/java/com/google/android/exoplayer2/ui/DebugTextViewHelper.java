@@ -193,7 +193,6 @@ package com.google.android.exoplayer2.ui;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.SharedPreferences;
 import android.os.Environment;
 import android.util.Log;
 import android.widget.TextView;

@@ -98,6 +98,10 @@ public final class SimpleExoPlayerView extends FrameLayout {
     layout.addView(surfaceView, 0);
   }
 
+  public PlaybackControlView getPlaybackController() {
+    return controller;
+  }
+
   /**
    * Set the {@link SimpleExoPlayer} to use. The {@link SimpleExoPlayer#setTextOutput} and
    * {@link SimpleExoPlayer#setVideoListener} method of the player will be called and previous

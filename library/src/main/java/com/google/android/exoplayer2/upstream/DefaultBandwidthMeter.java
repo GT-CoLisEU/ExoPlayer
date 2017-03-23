@@ -17,6 +17,8 @@ package com.google.android.exoplayer2.upstream;
 
 import android.os.Handler;
 import android.os.SystemClock;
+import android.util.Log;
+
 import com.google.android.exoplayer2.util.Assertions;
 import com.google.android.exoplayer2.util.SlidingPercentile;
 
@@ -61,9 +63,17 @@ public final class DefaultBandwidthMeter implements BandwidthMeter, TransferList
     bitrateEstimate = NO_ESTIMATE;
   }
 
+  public String toLog() {
+    return this.bitrateEstimate + "";
+  }
+
   @Override
   public synchronized long getBitrateEstimate() {
     return bitrateEstimate;
+  }
+
+  public void setBitrateEstimate(long bitrateEstimate) {
+    this.bitrateEstimate = bitrateEstimate;
   }
 
   @Override
@@ -92,8 +102,8 @@ public final class DefaultBandwidthMeter implements BandwidthMeter, TransferList
       if (totalElapsedTimeMs >= ELAPSED_MILLIS_FOR_ESTIMATE
           || totalBytesTransferred >= BYTES_TRANSFERRED_FOR_ESTIMATE) {
         float bitrateEstimateFloat = slidingPercentile.getPercentile(0.5f);
-        bitrateEstimate = Float.isNaN(bitrateEstimateFloat) ? NO_ESTIMATE
-            : (long) bitrateEstimateFloat;
+        bitrateEstimate = Float.isNaN(bitrateEstimateFloat) ? NO_ESTIMATE : (long) bitrateEstimateFloat;
+//        Log.i("BNDWTH4", bitrateEstimate+"");
       }
     }
     notifyBandwidthSample(sampleElapsedTimeMs, sampleBytesTransferred, bitrateEstimate);
