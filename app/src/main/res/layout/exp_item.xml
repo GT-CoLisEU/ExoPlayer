@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?><!-- Copyright (C) 2016 The Android Open Source Project
+
+     Licensed under the Apache License, Version 2.0 (the "License");
+     you may not use this file except in compliance with the License.
+     You may obtain a copy of the License at
+
+          http://www.apache.org/licenses/LICENSE-2.0
+
+     Unless required by applicable law or agreed to in writing, software
+     distributed under the License is distributed on an "AS IS" BASIS,
+     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+     See the License for the specific language governing permissions and
+     limitations under the License.
+-->
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/name"
+        android:textColor="@color/def"
+        android:id="@+id/tv_exp_item_name"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="7dp"
+        android:textStyle="bold"
+        android:layout_alignParentTop="true"
+        android:layout_toEndOf="@+id/img_static_icon" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/filename"
+        android:id="@+id/tv_exp_item_filename"
+        android:layout_below="@+id/tv_exp_item_name"
+        android:layout_alignStart="@+id/tv_exp_item_name" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/ipport"
+        android:layout_marginBottom="5dp"
+        android:id="@+id/tv_exp_item_address"
+        android:layout_below="@+id/tv_exp_item_filename"
+        android:layout_alignStart="@+id/tv_exp_item_filename" />
+
+    <ImageView
+        android:layout_width="35dp"
+        android:layout_height="35dp"
+        android:contentDescription="@string/script"
+        android:layout_marginStart="10dp"
+        android:src="@drawable/experiment_verona_icon"
+        android:id="@+id/img_static_icon"
+        android:layout_alignTop="@+id/tv_exp_item_name"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="12dp" />
+
+    <!--<CheckBox-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:text="Used"-->
+        <!--android:clickable="false"-->
+        <!--android:focusable="false"-->
+        <!--android:id="@+id/cb_metric_item_used"-->
+        <!--android:layout_alignBottom="@+id/tv_metric_item_name"-->
+        <!--android:layout_alignParentRight="true"-->
+        <!--android:layout_alignParentEnd="true"-->
+        <!--android:layout_marginRight="40dp"-->
+        <!--android:layout_marginEnd="40dp" />-->
+</RelativeLayout>

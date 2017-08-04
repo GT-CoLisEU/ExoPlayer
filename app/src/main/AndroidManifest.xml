@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="utf-8"?><!-- Copyright (C) 2016 The Android Open Source Project
+
+     Licensed under the Apache License, Version 2.0 (the "License");
+     you may not use this file except in compliance with the License.
+     You may obtain a copy of the License at
+
+          http://www.apache.org/licenses/LICENSE-2.0
+
+     Unless required by applicable law or agreed to in writing, software
+     distributed under the License is distributed on an "AS IS" BASIS,
+     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+     See the License for the specific language governing permissions and
+     limitations under the License.
+-->
+
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.google.android.exoplayer2.demo"
+    android:versionCode="2000"
+    android:versionName="2.0.0">
+
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+
+    <!--<uses-sdk android:minSdkVersion="16" android:targetSdkVersion="24"/>-->
+
+    <application
+        android:allowBackup="true"
+        android:icon="@drawable/blue_verona"
+        android:label="@string/application_name"
+        android:largeHeap="true">
+
+        <!--android:label="@string/application_name"-->
+        <!--android:name="br.rnp.futebol.vocoliseu.visual.activity.InstructionsActivity"-->
+        <activity
+            android:name="br.rnp.futebol.verona.visual.activity.InstructionsActivity"
+            android:theme="@style/VOCoLisEU">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <activity
+            android:name="br.rnp.futebol.verona.visual.activity.unused.ExperimentConfigurationControllerActivity"
+            android:theme="@style/VOCoLisEU"/>
+
+        <activity
+            android:name="br.rnp.futebol.verona.visual.activity.experiment.ViewResultsActivity"
+            android:theme="@style/VOCoLisEU"/>
+
+        <activity
+            android:name="br.rnp.futebol.verona.visual.activity.StartActivity"
+            android:theme="@style/VOCoLisEU"/>
+
+        <activity
+            android:name="br.rnp.futebol.verona.visual.activity.unused.ExperimentGeneralInfoActivity"
+            android:theme="@style/VOCoLisEU"/>
+
+        <activity
+            android:name="br.rnp.futebol.verona.visual.activity.unused.ScriptControllerActivity"
+            android:theme="@style/VOCoLisEU"/>
+
+        <activity
+            android:name="br.rnp.futebol.verona.visual.activity.script.ScriptGeneralActivity"
+            android:theme="@style/VOCoLisEU"/>
+
+        <activity
+            android:name="br.rnp.futebol.verona.visual.activity.unused.ScriptMetricsActivity"
+            android:theme="@style/VOCoLisEU"/>
+
+        <activity
+            android:name="br.rnp.futebol.verona.visual.activity.graphs.RTTGraphActivity"
+            android:theme="@style/VOCoLisEU"/>
+
+        <activity
+            android:name="br.rnp.futebol.verona.visual.activity.graphs.QoSChartsActivity"
+            android:theme="@style/VOCoLisEU"/>
+
+        <activity
+            android:name="br.rnp.futebol.verona.visual.activity.graphs.QoEChartsActivity"
+            android:theme="@style/VOCoLisEU"/>
+
+        <activity
+            android:name="br.rnp.futebol.verona.visual.activity.experiment.ExperimentGeneralActivity"
+            android:theme="@style/VOCoLisEU"/>
+
+        <activity
+            android:name="br.rnp.futebol.verona.visual.activity.MainActivity"
+            android:theme="@style/VOCoLisEU"/>
+
+        <activity
+            android:name="br.rnp.futebol.verona.visual.activity.AboutActivity"
+            android:theme="@style/VOCoLisEU"/>
+
+        <activity
+            android:name="br.rnp.futebol.verona.visual.activity.experiment.ExperimentMetricsActivity"
+            android:theme="@style/VOCoLisEU"/>
+
+        <activity
+            android:name="br.rnp.futebol.verona.visual.activity.experiment.ExperimentScriptsActivity"
+            android:theme="@style/VOCoLisEU"/>
+
+        <activity
+            android:name="br.rnp.futebol.verona.visual.activity.UserActivity"
+            android:theme="@style/VOCoLisEU"/>
+
+        <activity
+            android:name="br.rnp.futebol.verona.visual.activity.unused.ExperimentControllerActivity"
+            android:theme="@style/VOCoLisEU"/>
+
+        <activity
+            android:name="br.rnp.futebol.verona.exoplayerlegacy.PlayerActivity"
+            android:configChanges="keyboard|keyboardHidden|orientation|screenSize|screenLayout|smallestScreenSize|uiMode"
+            android:label="@string/application_name"
+            android:launchMode="singleTop"
+            android:theme="@style/VOCoLisEU">
+            <intent-filter>
+                <action android:name="com.google.android.exoplayer.demo.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+
+                <data android:scheme="http" />
+                <data android:scheme="https" />
+                <data android:scheme="content" />
+                <data android:scheme="asset" />
+                <data android:scheme="file" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="com.google.android.exoplayer.demo.action.VIEW_LIST" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity><!-- ATTENTION: This was auto-generated to add Google Play services to your project for
+     App Indexing.  See https://g.co/AppIndexing/AndroidStudio for more information. -->
+        <meta-data
+            android:name="com.google.android.gms.version"
+            android:value="@integer/google_play_services_version" />
+
+    </application>
+
+</manifest>

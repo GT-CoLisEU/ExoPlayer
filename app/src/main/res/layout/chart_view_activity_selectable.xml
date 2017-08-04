@@ -1,0 +1,214 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~ Copyright 2015 AndroidPlot.com
+  ~
+  ~    Licensed under the Apache License, Version 2.0 (the "License");
+  ~    you may not use this file except in compliance with the License.
+  ~    You may obtain a copy of the License at
+  ~
+  ~        http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~    Unless required by applicable law or agreed to in writing, software
+  ~    distributed under the License is distributed on an "AS IS" BASIS,
+  ~    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~    See the License for the specific language governing permissions and
+  ~    limitations under the License.
+  -->
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    style="@style/VOCoLisEU"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/tb_qos_charts_qos"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:background="?attr/colorPrimary"
+        android:minHeight="?attr/actionBarSize"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+        app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
+
+    <com.github.mikephil.charting.charts.BarChart
+        android:id="@+id/chart_rtt_qos"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
+        android:layout_marginTop="5dp"
+        android:layout_below="@+id/tb_qos_charts_qos"
+        android:layout_width="match_parent"
+        android:layout_height="150dp" />
+
+    <com.github.mikephil.charting.charts.HorizontalBarChart
+        android:id="@+id/chart_packetloss_qos"
+        android:layout_below="@+id/tv_qos_results_rtt_qos"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
+        android:layout_marginTop="20dp"
+        android:layout_width="match_parent"
+        android:layout_height="150dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/cb_pst_selectable_qos"
+        android:text="Network RTT"
+        android:textColor="@color/black"
+        android:gravity="center"
+        android:id="@+id/tv_qos_results_rtt_qos"
+        android:layout_centerVertical="true"
+        android:layout_centerHorizontal="true" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/black"
+        android:text="Packet Loss"
+        android:gravity="center"
+        android:id="@+id/tv_qos_results_loss_qos"
+        android:layout_below="@+id/chart_packetloss_qos"
+        android:layout_centerHorizontal="true" />
+
+    <ListView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/lv_qos_legend_qos"
+        android:divider="@null"
+        android:dividerHeight="0dp"
+        android:layout_below="@+id/textView5_qos"
+        android:layout_centerHorizontal="true"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
+        android:layout_marginBottom="20dp"
+        android:layout_marginTop="5dp" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:background="@color/def"
+        android:layout_marginTop="5dp"
+        android:layout_marginStart="15dp"
+        android:layout_marginEnd="15dp"
+        android:layout_height="1dp"
+        android:layout_below="@+id/tv_qos_results_rtt_qos"
+        android:layout_alignParentEnd="true" >
+
+    </RelativeLayout>
+
+    <CheckBox
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Playback Start Time"
+        android:textSize="12sp"
+        android:layout_marginStart="10dp"
+        android:id="@+id/cb_pst_selectable_qos"
+        android:layout_alignTop="@+id/cb_frozen_time_selectable_qos"
+        android:layout_alignStart="@+id/chart_rtt_qos" />
+
+    <CheckBox
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Frozen Time"
+        android:textSize="12sp"
+        android:layout_marginEnd="10dp"
+        android:id="@+id/cb_frozen_time_selectable_qos"
+        android:layout_below="@+id/chart_rtt_qos"
+        android:layout_alignEnd="@+id/chart_rtt_qos" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:background="@color/def"
+        android:layout_marginTop="5dp"
+        android:layout_marginStart="15dp"
+        android:layout_marginEnd="15dp"
+        android:layout_height="1dp"
+        android:layout_below="@+id/tv_qos_results_loss_qos"
+        android:layout_centerHorizontal="true"
+        android:id="@+id/relativeLayout_qos" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Providers"
+        android:id="@+id/textView5_qos"
+        android:textColor="@color/black"
+        android:layout_marginTop="5dp"
+        android:layout_marginLeft="5dp"
+        android:layout_below="@+id/relativeLayout_qos"
+        android:layout_alignStart="@+id/relativeLayout_qos" />
+
+    <!--<LinearLayout-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:layout_width="fill_parent"-->
+    <!--android:layout_gravity="center"-->
+    <!--android:orientation="horizontal">-->
+
+    <!--<Spinner-->
+    <!--android:id="@+id/spRenderStyle"-->
+    <!--android:layout_width="wrap_content"-->
+    <!--android:layout_height="wrap_content"/>-->
+
+    <!--<Spinner-->
+    <!--android:id="@+id/spSeriesSize"-->
+    <!--android:layout_width="wrap_content"-->
+    <!--android:layout_height="wrap_content"/>-->
+
+    <!--</LinearLayout>-->
+
+    <!--<LinearLayout-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:layout_width="fill_parent"-->
+    <!--android:layout_gravity="center"-->
+    <!--android:orientation="horizontal">-->
+
+    <!--<Spinner-->
+    <!--android:id="@+id/spWidthStyle"-->
+    <!--android:layout_width="wrap_content"-->
+    <!--android:layout_height="wrap_content"/>-->
+
+    <!--<RelativeLayout-->
+    <!--android:id="@+id/sectionGraph"-->
+    <!--android:layout_width="fill_parent"-->
+    <!--android:layout_height="wrap_content">-->
+
+    <!--<SeekBar-->
+    <!--android:layout_width="fill_parent"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:paddingLeft="10dp"-->
+    <!--android:paddingRight="10dp"-->
+    <!--android:max="300"-->
+    <!--android:progress="10"-->
+    <!--android:id="@+id/sbFixed"/>-->
+
+    <!--<SeekBar-->
+    <!--android:layout_width="fill_parent"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:paddingLeft="10dp"-->
+    <!--android:paddingRight="10dp"-->
+    <!--android:max="50"-->
+    <!--android:progress="1"-->
+    <!--android:id="@+id/sbVariable"/>-->
+    <!--</RelativeLayout>-->
+    <!--</LinearLayout>-->
+
+    <!--<LinearLayout-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:layout_width="wrap_content"-->
+    <!--android:layout_gravity="center"-->
+    <!--android:orientation="horizontal">-->
+
+    <!--<CheckBox-->
+    <!--android:id="@+id/s1CheckBox"-->
+    <!--android:text="Series 1"-->
+    <!--android:checked="true"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:layout_width="fill_parent"/>-->
+
+    <!--<CheckBox-->
+    <!--android:id="@+id/s2CheckBox"-->
+    <!--android:text="Series 2"-->
+    <!--android:checked="true"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:layout_width="fill_parent"/>-->
+    <!--</LinearLayout>-->
+</RelativeLayout>

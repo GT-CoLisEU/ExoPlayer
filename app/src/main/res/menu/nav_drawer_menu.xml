@@ -1,0 +1,63 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="nkdroid.tutorial.navigationview.MainActivity">
+
+    <group
+        android:id="@+id/grp_video"
+        android:checkableBehavior="single">
+        <item
+            android:id="@+id/navigation_item_video"
+            android:icon="@drawable/video_verona_icon"
+            android:title="@string/new_video" />
+    </group>
+
+    <group
+        android:id="@+id/grp_exp"
+        android:checkableBehavior="single">
+        <item
+            android:id="@+id/navigation_item_experiment"
+            android:icon="@drawable/experiment_verona_icon_new"
+            android:title="@string/new_experiment" />
+        <item
+            android:id="@+id/navigation_item_import"
+            android:icon="@drawable/experiment_verona_icon_import"
+            android:title="@string/import_experiment" />
+        <item
+            android:id="@+id/navigation_item_export"
+            android:icon="@drawable/experiment_verona_icon_export"
+            android:title="@string/export_experiment" />
+    </group>
+
+    <group
+        android:id="@+id/grp_results"
+        android:checkableBehavior="single">
+        <item
+            android:id="@+id/navigation_item_view_results"
+            android:icon="@drawable/results_view_icon"
+            android:title="View Results" />
+        <item
+            android:id="@+id/navigation_item_export_results"
+            android:icon="@drawable/results_export_icon"
+            android:title="Export results" />
+        <item
+            android:id="@+id/navigation_item_open_results"
+            android:icon="@drawable/results_clean_icon"
+            android:title="Clean results" />
+    </group>
+
+    <group
+        android:id="@+id/grp_others"
+        android:checkableBehavior="single">
+        <item
+            android:id="@+id/navigation_item_tutorial"
+            android:icon="@drawable/help_verona_icon"
+            android:title="@string/tutorial" />
+
+        <item
+            android:id="@+id/navigation_item_about"
+            android:icon="@drawable/about_verona_icon"
+            android:title="@string/about" />
+    </group>
+
+
+</menu>

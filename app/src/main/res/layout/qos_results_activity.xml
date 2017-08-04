@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <!--<TextView-->
+        <!--android:id="@+id/tv_res_qos_title"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_below="@+id/tb_experiment_results"-->
+        <!--android:layout_marginStart="10dp"-->
+        <!--android:layout_marginTop="10dp"-->
+        <!--android:text="QoS Results"-->
+        <!--android:textColor="@color/def"-->
+        <!--android:textSize="16sp"-->
+        <!--android:textStyle="bold" />-->
+<!---->
+    <!--<RelativeLayout-->
+        <!--android:id="@+id/rl_qos_res"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="1dp"-->
+        <!--android:layout_below="@+id/tv_res_qos_title"-->
+        <!--android:layout_centerHorizontal="true"-->
+        <!--android:layout_marginLeft="5dp"-->
+        <!--android:layout_marginRight="5dp"-->
+        <!--android:background="@color/def" />-->
+
+    <ListView
+        android:id="@+id/lv_qos_results"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="60dp"
+        android:dividerHeight="1dp"
+        android:layout_centerHorizontal="true" />
+
+    <Button
+        android:layout_width="150dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="3dp"
+        android:background="@drawable/bt_dark_style"
+        android:text="Compare results"
+        android:textColor="@color/wht"
+        android:id="@+id/bt_compare_results"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true" />
+
+    <!--<TextView-->
+        <!--android:id="@+id/tv_res_qoe_title"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_below="@+id/lv_qos_results"-->
+        <!--android:layout_marginStart="10dp"-->
+        <!--android:layout_marginTop="10dp"-->
+        <!--android:text="QoE Results"-->
+        <!--android:textColor="@color/def"-->
+        <!--android:textSize="16sp"-->
+        <!--android:textStyle="bold" />-->
+<!---->
+    <!--<RelativeLayout-->
+        <!--android:id="@+id/rl_qoe_res"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="1dp"-->
+        <!--android:layout_below="@+id/tv_res_qoe_title"-->
+        <!--android:layout_centerHorizontal="true"-->
+        <!--android:layout_marginLeft="5dp"-->
+        <!--android:layout_marginRight="5dp"-->
+        <!--android:background="@color/def" />-->
+<!---->
+    <!--<ListView-->
+        <!--android:id="@+id/lv_qoe_results"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_below="@+id/rl_qoe_res"-->
+        <!--android:layout_centerHorizontal="true"-->
+        <!--android:layout_marginBottom="10dp" />-->
+<!---->
+
+</RelativeLayout>
