@@ -353,6 +353,9 @@ public class MainActivity extends AppCompatActivity
                     }
                 Toast.makeText(getBaseContext(), "No experiment available to export", Toast.LENGTH_SHORT).show();
                 break;
+            case (R.id.navigation_item_view_results):
+                Toast.makeText(getBaseContext(), "Not available. Under development...", Toast.LENGTH_SHORT).show();
+                break;
             case (R.id.navigation_item_tutorial):
                 Intent itInst = new Intent(getBaseContext(), InstructionsActivity.class);
                 itInst.putExtra("start", false);

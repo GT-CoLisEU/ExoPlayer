@@ -132,7 +132,7 @@ public class ExpListFragment extends Fragment {
                     case R.id.action_export:
                         Intent emailIntent = new Intent(Intent.ACTION_SEND);
                         ArrayList<Uri> uris = new ArrayList<>();
-                        File filelocation = new File(Environment.getExternalStorageDirectory().getAbsolutePath(), exp.getFilename().concat("txt"));
+                        File filelocation = new File(Environment.getExternalStorageDirectory().getAbsolutePath(), exp.getFilename().concat(".txt"));
                         Uri path = Uri.fromFile(filelocation);
                         uris.add(path);
                         emailIntent.putExtra(Intent.EXTRA_STREAM, uris.get(0));
@@ -143,7 +143,8 @@ public class ExpListFragment extends Fragment {
                     case R.id.action_export_results:
                         emailIntent = new Intent(Intent.ACTION_SEND);
                         uris = new ArrayList<>();
-                        filelocation = new File(Environment.getExternalStorageDirectory().getAbsolutePath(), exp.getFilename().concat("csv"));
+                        System.out.println(exp.getFilename().concat("csv"));
+                        filelocation = new File(Environment.getExternalStorageDirectory().getAbsolutePath(), exp.getFilename().concat(".csv"));
                         if (filelocation.exists()) {
                             path = Uri.fromFile(filelocation);
                             uris.add(path);
@@ -151,13 +152,15 @@ public class ExpListFragment extends Fragment {
                             emailIntent.putExtra(Intent.EXTRA_SUBJECT, "VERONA results");
                             emailIntent.setType("file/*");
                             startActivity(emailIntent);
+                        }else {
+                            Toast.makeText(getActivity(), "File not found", Toast.LENGTH_SHORT).show();
                         }
-                        Toast.makeText(getActivity(), "File not found", Toast.LENGTH_SHORT).show();
                         break;
                     case R.id.action_view_results:
-                        Intent intent = new Intent(getActivity(), ViewResultsActivity.class);
-                        intent.putExtra("experiment", exp);
-                        startActivity(intent);
+                        Toast.makeText(getActivity(), "Not available. Under development...", Toast.LENGTH_SHORT).show();
+                        //Intent intent = new Intent(getActivity(), ViewResultsActivity.class);
+                        //intent.putExtra("experiment", exp);
+                        //startActivity(intent);
                         break;
                 }
                 return false;

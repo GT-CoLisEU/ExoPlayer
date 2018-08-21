@@ -144,6 +144,8 @@ public class PlayerActivity extends Activity implements OnClickListener, ExoPlay
         rootView.setOnClickListener(this);
 //        debugRootView = (LinearLayout) findViewById(R.id.controls_root);
         debugTextView = (TextView) findViewById(R.id.debug_text_view);
+        //For not showing debug infos:
+        debugTextView.setVisibility(View.GONE);
 //        retryButton = (Button) findViewById(R.id.retry_button);
 //        retryButton.setOnClickListener(this);
 
